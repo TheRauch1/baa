@@ -1,0 +1,13 @@
+transformers
+bitsandbytes
+trl
+accelerate
+torch
+ipykernel
+ipython
+ipywidgets
+python-dotenv
+black[jupyter]
+tqdm
+autoawq
+nbstripout
