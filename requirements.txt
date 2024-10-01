@@ -11,3 +11,5 @@ black[jupyter]
 tqdm
 autoawq
 nbstripout
+datasets
+deepeval
