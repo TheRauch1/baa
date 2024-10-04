@@ -13,3 +13,4 @@ autoawq
 nbstripout
 datasets
 deepeval
+matplotlib
