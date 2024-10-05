@@ -14,3 +14,4 @@ nbstripout
 datasets
 deepeval
 matplotlib
+ruff
