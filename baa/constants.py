@@ -1,3 +1,1 @@
-device_map = {
-    "": 0,
-}
+device_map = "auto" 
