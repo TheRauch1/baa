@@ -16,3 +16,6 @@ deepeval
 matplotlib
 ruff
 optimum-quanto
+torchvision
+torchmetrics
+torchtext
