@@ -97,8 +97,8 @@ def replace_linear_layer(base_model, quantizer_class, exclude_list, quantized=Tr
             )
 
 
-# model_name = "meta-llama/Llama-3.2-1B-Instruct"
-model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
+model_name = "meta-llama/Llama-3.2-1B-Instruct"
+# model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map=device_map)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
@@ -108,9 +108,9 @@ dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
 
 benchmark = AccuracyBenchmark(model=model, tokenizer=tokenizer, dataset=dataset)
 
-print(f"Original model accuracy: {benchmark.evaluate(sample_size=1000):.2f}")
+print(f"Original model accuracy: {benchmark.evaluate(sample_size=200):.2f}")
 
 replace_linear_layer(model, QuantizedLinearLayer, [], quantized=True)
 
 print(f"Quantized model memory usage: {get_llm_memory_usage(model) / 1024 ** 2:.2f} MB")
-print(f"Quantized model accuracy: {benchmark.evaluate(sample_size=1000):.2f}")
+print(f"Quantized model accuracy: {benchmark.evaluate(sample_size=200):.2f}")
