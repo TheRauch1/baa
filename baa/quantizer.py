@@ -1,10 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from datasets import load_dataset
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-from baa import AccuracyBenchmark, device_map, get_llm_memory_usage
 
 
 class QuantizedLinearLayer(nn.Module):
@@ -95,22 +91,3 @@ def replace_linear_layer(base_model, quantizer_class, exclude_list, quantized=Tr
             replace_linear_layer(
                 child, quantizer_class, exclude_list, quantized=quantized
             )
-
-
-# model_name = "meta-llama/Llama-3.2-1B-Instruct"
-model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map=device_map)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-print(f"Model memory usage: {get_llm_memory_usage(model) / 1024 ** 2:.2f} MB")
-
-dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
-
-benchmark = AccuracyBenchmark(model=model, tokenizer=tokenizer, dataset=dataset)
-
-print(f"Original model accuracy: {benchmark.evaluate(sample_size=200):.2f}")
-
-replace_linear_layer(model, QuantizedLinearLayer, [], quantized=True)
-
-print(f"Quantized model memory usage: {get_llm_memory_usage(model) / 1024 ** 2:.2f} MB")
-print(f"Quantized model accuracy: {benchmark.evaluate(sample_size=200):.2f}")

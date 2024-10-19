@@ -93,8 +93,8 @@ def evaluate(model):
         for i, (data, target) in enumerate(test_loader):
             data, target = data.to(device), target.to(device)
             output = model(data)
-            # if i == 0:
-            #     print(f"Output: {output}")
+            if i == 0:
+                print(f"Output: {output}")
             test_loss += criterion(output, target).item()  # Sum up batch loss
             pred = output.argmax(
                 dim=1, keepdim=True
