@@ -77,10 +77,13 @@ class QuantizedLinearLayer(nn.Module):
         # self.activation_scale = torch.FloatTensor([1.0]).to("cuda")
         # assert self.activation_scale.shape[0] == 576
         if self.activation_scale is not None:
-            self.activation_scale = x.abs().max() / ((self.qmax - self.qmin) // 2)
+            # self.activation_scale = x.abs().max() / ((self.qmax - self.qmin) // 2)
             # self.activation_scale = self.activation_scale.abs().max()
             x_int = torch.round(
-                (torch.div(x, self.activation_scale)).clamp(self.qmin, self.qmax)
+                (torch.div(x, self.activation_scale)).clamp(
+                    torch.iinfo(torch.int16).min,
+                    torch.iinfo(torch.int16).max,
+                )
             )
             assert x.shape == x_int.shape
             # assert x_int.shape[2] == self.weight.shape[0]
@@ -144,7 +147,7 @@ def replace_linear_layer(
                     # max_abs = all_activations.abs().max().item()
                     layer_activations = torch.FloatTensor(layer_activations).to("cuda")
                     max_abs = layer_activations.mean().item()
-                    bits = 8
+                    bits = 16
                     Qmax = 2 ** (bits - 1) - 1
                     layer_scale = max_abs / Qmax
 
@@ -171,6 +174,7 @@ def replace_linear_layer(
 
 
 model_name = "meta-llama/Llama-3.2-1B-Instruct"
+# model_name = "meta-llama/Llama-3.1-8B-Instruct"
 # model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map=device_map)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -225,12 +229,11 @@ with torch.no_grad():
     replace_linear_layer(
         base_model=model,
         quantizer_class=QuantizedLinearLayer,
-        hidden_states=None,
+        hidden_states=hidden_states,
         exclude_list=[],
         quantized=True,
     )
 
-    # cuda garbage collection
     torch.cuda.empty_cache()
 
     print_memory_usage(model)
