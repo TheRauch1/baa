@@ -79,11 +79,9 @@ class QuantizedLinearLayer(nn.Module):
         if self.activation_scale is not None:
             # self.activation_scale = x.abs().max() / ((self.qmax - self.qmin) // 2)
             # self.activation_scale = self.activation_scale.abs().max()
-            x_int = torch.round(
-                (torch.div(x, self.activation_scale)).clamp(
-                    torch.iinfo(torch.int16).min,
-                    torch.iinfo(torch.int16).max,
-                )
+            x_int = torch.round(torch.div(x, self.activation_scale)).clamp(
+                torch.iinfo(torch.int16).min,
+                torch.iinfo(torch.int16).max,
             )
             assert x.shape == x_int.shape
             # assert x_int.shape[2] == self.weight.shape[0]
@@ -192,7 +190,7 @@ for name, module in model.named_modules():
         setattr(module, "custom_name", name)
 
 
-def get_hidden_states_output(module, input, output):
+def get_hidden_states_input(module, input, output):
     if isinstance(module, nn.Linear):
         layer_name = module.custom_name
         if layer_name not in hidden_states:
@@ -205,7 +203,7 @@ def get_hidden_states_output(module, input, output):
 # Register the hook
 for name, module in model.named_modules():
     if isinstance(module, nn.Linear):
-        module.register_forward_hook(get_hidden_states_output)
+        module.register_forward_hook(get_hidden_states_input)
 
 
 def remove_all_hooks(model: nn.Module) -> None:
