@@ -19,3 +19,6 @@ optimum-quanto
 torchvision
 torchmetrics
 torchtext
+plotly
+streamlit
+scipy

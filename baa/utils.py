@@ -1,6 +1,5 @@
 import textwrap
 
-
 def get_memory_usage(model):
     """Calculates the memory usage of a PyTorch model."""
     total_memory = 0

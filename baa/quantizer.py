@@ -5,6 +5,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from baa.singletons import hidden_states
+
 
 class QuantizedLinearLayerWithActivation(nn.Module):
     def __init__(
@@ -143,7 +145,7 @@ class QuantizedLinearLayer(nn.Module):
 
 
 def replace_linear_layer_with_activation(
-    base_model, quantizer_class, hidden_states, exclude_list, quantized=True
+    base_model, quantizer_class, hidden_states = None, exclude_list = [], quantized=True
 ):
     for name, child in base_model.named_children():
         if name in exclude_list:
@@ -161,9 +163,7 @@ def replace_linear_layer_with_activation(
                 if custom_name in hidden_states:
                     layer_activations = hidden_states[custom_name]
 
-                    layer_activations = torch.FloatTensor(layer_activations).to(
-                        base_model.device
-                    )
+                    layer_activations = torch.FloatTensor(layer_activations)
                     max_abs = layer_activations.mean().item()
                     bits = 16
                     Qmax = 2 ** (bits - 1) - 1
@@ -230,7 +230,6 @@ def add_custom_name_to_linear_layers(model: nn.Module) -> None:
 
 
 def get_hidden_states_output(module, input, output):
-    hidden_states = {}
     if isinstance(module, nn.Linear):
         layer_name = module.custom_name
         if layer_name not in hidden_states:
@@ -241,9 +240,12 @@ def get_hidden_states_output(module, input, output):
 
 
 def get_hidden_states_input(module, input, output):
-    hidden_states = {}
     if isinstance(module, nn.Linear):
-        layer_name = module.custom_name
+        try:
+            layer_name = module.custom_name
+        except AttributeError:
+            add_custom_name_to_linear_layers(module)
+            layer_name = module.custom_name
         if layer_name not in hidden_states:
             hidden_states[layer_name] = []
         max_abs_activation = input[0].abs().max().item()
