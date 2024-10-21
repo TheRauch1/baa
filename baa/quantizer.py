@@ -27,8 +27,10 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             32: torch.int32,
         }
 
-        self.qmin = torch.iinfo(self.type_mapping[bits]).min
-        self.qmax = torch.iinfo(self.type_mapping[bits]).max
+        # self.qmin = torch.iinfo(self.type_mapping[bits]).min
+        # self.qmax = torch.iinfo(self.type_mapping[bits]).max
+        self.qmin = -(2 ** (bits - 1))
+        self.qmax = 2 ** (bits - 1) - 1
 
         self.register_buffer(
             "weight",
@@ -36,7 +38,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
                 -(2 ** (bits - 1)),
                 2 ** (bits - 1),
                 (out_features, in_features),
-            ).to(self.type_mapping[bits]),
+            ),
         )
 
         self.register_buffer(
@@ -63,7 +65,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
 
         quantized_weight = torch.clamp(
             torch.round(weight / scale.unsqueeze(1)), self.qmin, self.qmax
-        ).to(self.type_mapping[self.bits])
+        )
 
         self.weight = quantized_weight
         self.scale = scale
@@ -76,11 +78,11 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             )
             assert x.shape == x_int.shape
 
-            output_int = F.linear(x_int, self.weight.to(x.dtype))
+            output_int = F.linear(x_int, self.weight)
             output = output_int * (self.activation_scale * self.scale)
 
         else:
-            output = F.linear(x, self.weight.to(x.dtype)) * self.scale
+            output = F.linear(x, self.weight) * self.scale
         if self.bias is not None:
             output += self.bias
         return output
@@ -145,7 +147,7 @@ class QuantizedLinearLayer(nn.Module):
 
 
 def replace_linear_layer_with_activation(
-    base_model, quantizer_class, hidden_states = None, exclude_list = [], quantized=True
+    base_model, quantizer_class, hidden_states=None, exclude_list=[], quantized=True
 ):
     for name, child in base_model.named_children():
         if name in exclude_list:
@@ -175,7 +177,7 @@ def replace_linear_layer_with_activation(
                 activation_scale=layer_scale,
                 bias=old_bias is not None,
                 dtype=old_weight.dtype,
-                bits=8,
+                bits=5,
             )
 
             setattr(base_model, name, quantizer_layer)
@@ -249,6 +251,7 @@ def get_hidden_states_input(module, input, output):
         if layer_name not in hidden_states:
             hidden_states[layer_name] = []
         max_abs_activation = input[0].abs().max().item()
+        # max_abs_activation = input[0].to("cpu").numpy()
         hidden_states[layer_name].append(max_abs_activation)
 
 
