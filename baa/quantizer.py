@@ -1,3 +1,4 @@
+import gc
 from collections import OrderedDict
 from typing import Callable, Dict
 
@@ -16,10 +17,12 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         activation_scale=None,
         bias=True,
         dtype=torch.float32,
-        bits=8,
+        weight_bits=8,
+        activation_bits=16,
     ):
         super().__init__()
-        self.bits = bits
+        self.weight_bits = weight_bits
+        self.activation_bits = activation_bits
 
         self.type_mapping = {
             8: torch.int8,
@@ -29,14 +32,16 @@ class QuantizedLinearLayerWithActivation(nn.Module):
 
         # self.qmin = torch.iinfo(self.type_mapping[bits]).min
         # self.qmax = torch.iinfo(self.type_mapping[bits]).max
-        self.qmin = -(2 ** (bits - 1))
-        self.qmax = 2 ** (bits - 1) - 1
+        self.weight_qmin = -(2 ** (self.weight_bits - 1))
+        self.weight_qmax = 2 ** (self.weight_bits - 1) - 1
+        self.activation_qmin = -(2 ** (activation_bits - 1))
+        self.activation_qmax = 2 ** (activation_bits - 1) - 1
 
         self.register_buffer(
             "weight",
             torch.randint(
-                -(2 ** (bits - 1)),
-                2 ** (bits - 1),
+                self.weight_qmin,
+                self.weight_qmax,
                 (out_features, in_features),
             ),
         )
@@ -58,13 +63,17 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         self.activation_scale = activation_scale
 
     def quantize(self, weight):
-        weight_f32 = weight.clone().to(torch.float32)
+        weight_f32 = weight.detach().clone().to(torch.float32)
 
-        scale = weight_f32.abs().max(dim=-1).values / ((self.qmax - self.qmin) // 2)
+        scale = weight_f32.abs().max(dim=-1).values / (
+            (self.weight_qmax - self.weight_qmin) // 2
+        )
         scale = scale.to(weight.dtype)
 
         quantized_weight = torch.clamp(
-            torch.round(weight / scale.unsqueeze(1)), self.qmin, self.qmax
+            torch.round(weight_f32 / scale.unsqueeze(1)),
+            self.weight_qmin,
+            self.weight_qmax,
         )
 
         self.weight = quantized_weight
@@ -73,8 +82,8 @@ class QuantizedLinearLayerWithActivation(nn.Module):
     def forward(self, x):
         if self.activation_scale is not None:
             x_int = torch.round(torch.div(x, self.activation_scale)).clamp(
-                torch.iinfo(torch.int16).min,
-                torch.iinfo(torch.int16).max,
+                self.activation_qmin,
+                self.activation_qmax,
             )
             assert x.shape == x_int.shape
 
@@ -147,7 +156,13 @@ class QuantizedLinearLayer(nn.Module):
 
 
 def replace_linear_layer_with_activation(
-    base_model, quantizer_class, hidden_states=None, exclude_list=[], quantized=True
+    base_model,
+    quantizer_class,
+    weight_bits=8,
+    activation_bits=16,
+    hidden_states=None,
+    exclude_list=[],
+    quantized=True,
 ):
     for name, child in base_model.named_children():
         if name in exclude_list:
@@ -167,17 +182,18 @@ def replace_linear_layer_with_activation(
 
                     layer_activations = torch.FloatTensor(layer_activations)
                     max_abs = layer_activations.mean().item()
-                    bits = 16
+                    bits = activation_bits
                     Qmax = 2 ** (bits - 1) - 1
                     layer_scale = max_abs / Qmax
 
-            quantizer_layer = quantizer_class(
+            quantizer_layer: QuantizedLinearLayerWithActivation = quantizer_class(
                 in_features,
                 out_features,
                 activation_scale=layer_scale,
                 bias=old_bias is not None,
                 dtype=old_weight.dtype,
-                bits=5,
+                weight_bits=weight_bits,
+                activation_bits=activation_bits,
             )
 
             setattr(base_model, name, quantizer_layer)
@@ -189,7 +205,13 @@ def replace_linear_layer_with_activation(
 
         else:
             replace_linear_layer_with_activation(
-                child, quantizer_class, hidden_states, exclude_list, quantized=quantized
+                base_model=child,
+                quantizer_class=quantizer_class,
+                weight_bits=weight_bits,
+                activation_bits=activation_bits,
+                hidden_states=hidden_states,
+                exclude_list=exclude_list,
+                quantized=quantized,
             )
 
 
