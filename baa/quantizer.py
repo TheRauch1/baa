@@ -74,10 +74,11 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             torch.round(weight_f32 / scale.unsqueeze(1)),
             self.weight_qmin,
             self.weight_qmax,
-        )
+        ).to(torch.int8)
 
         self.weight = quantized_weight
         self.scale = scale
+        torch.cuda.empty_cache()
 
     def forward(self, x):
         if self.activation_scale is not None:
@@ -87,11 +88,11 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             )
             assert x.shape == x_int.shape
 
-            output_int = F.linear(x_int, self.weight)
+            output_int = F.linear(x_int, self.weight.to(x_int.dtype))
             output = output_int * (self.activation_scale * self.scale)
 
         else:
-            output = F.linear(x, self.weight) * self.scale
+            output = F.linear(x, self.weight.to(x.dtype)) * self.scale
         if self.bias is not None:
             output += self.bias
         return output
