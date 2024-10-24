@@ -166,10 +166,10 @@ def replace_linear_layer_with_activation(
     quantized=True,
 ):
     for name, child in base_model.named_children():
-        if name in exclude_list:
-            continue
         if isinstance(child, nn.Linear):
             assert hasattr(child, "custom_name")
+            if child.custom_name in exclude_list:
+                continue
             old_bias = child.bias
             old_weight = child.weight
             in_features = child.in_features
