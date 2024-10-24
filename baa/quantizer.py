@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from baa.singletons import hidden_states
+from baa.singletons import hidden_states, names
 
 
 class QuantizedLinearLayerWithActivation(nn.Module):
@@ -248,10 +248,13 @@ def replace_linear_layer(base_model, quantizer_class, exclude_list, quantized=Tr
             )
 
 
-def add_custom_name_to_linear_layers(model: nn.Module) -> None:
+def add_custom_name_to_linear_layers(model) -> None:
     for name, module in model.named_modules():
-        if isinstance(module, nn.Linear):
+        if isinstance(module, nn.Linear) or isinstance(
+            module, QuantizedLinearLayerWithActivation
+        ):
             setattr(module, "custom_name", name)
+            names.append(name)
 
 
 def get_hidden_states_output(module, input, output):
@@ -276,6 +279,22 @@ def get_hidden_states_input(module, input, output):
         max_abs_activation = input[0].abs().max().item()
         # max_abs_activation = input[0].to("cpu").numpy()
         hidden_states[layer_name].append(max_abs_activation)
+
+
+def get_weights(model):
+    weights = {}
+    for name, module in model.named_modules():
+        if isinstance(module, nn.Linear) or isinstance(
+            module, QuantizedLinearLayerWithActivation
+        ):
+            try:
+                layer_name = module.custom_name
+            except AttributeError:
+                add_custom_name_to_linear_layers(model)
+                layer_name = module.custom_name
+            if layer_name not in weights:
+                weights[layer_name] = module.weight.data
+    return weights
 
 
 def remove_all_hooks(model: nn.Module) -> None:
