@@ -12,15 +12,27 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(28 * 28, 256)
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(256, 10)
+        self.fc1 = nn.Linear(28 * 28, 256)
+        self.fc2 = nn.Linear(256, 256)
+        self.fc3 = nn.Linear(256, 1024)
+        self.fc4 = nn.Linear(1024, 512)
+        self.fc5 = nn.Linear(512, 256)
+        self.fc6 = nn.Linear(256, 10)
 
     def forward(self, x):
         x = self.flatten(x)
         x = self.fc1(x)
         x = self.relu(x)
         x = self.fc2(x)
+        x = self.relu(x)
+        x = self.fc3(x)
+        x = self.relu(x)
+        x = self.fc4(x)
+        x = self.relu(x)
+        x = self.fc5(x)
+        x = self.relu(x)
+        x = self.fc6(x)
         return x
 
 
@@ -72,7 +84,7 @@ class MNIST:
         test_loss = 0
         correct = 0
         criterion = nn.CrossEntropyLoss()
-        with torch.inference_mode():
+        with torch.no_grad():
             for i, (data, target) in enumerate(self.test_loader):
                 data, target = data.to(device), target.to(device)
                 output = self.model(data)

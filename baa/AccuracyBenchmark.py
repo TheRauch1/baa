@@ -38,7 +38,7 @@ class AccuracyBenchmark:
             # Mask labels to ignore overlapping tokens
             labels[:, :-target_len] = -100
 
-            with torch.inference_mode():
+            with torch.no_grad():
                 outputs = self.model(inputs)
                 logits = outputs.logits
 
