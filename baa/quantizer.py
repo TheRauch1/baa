@@ -74,7 +74,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             torch.round(weight_f32 / scale.unsqueeze(1)),
             self.weight_qmin,
             self.weight_qmax,
-        ).to(torch.int8)
+        )
 
         self.weight = quantized_weight
         self.scale = scale
@@ -87,8 +87,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
                 self.activation_qmax,
             )
             assert x.shape == x_int.shape
-
-            output_int = F.linear(x_int, self.weight.to(x_int.dtype))
+            output_int = F.linear(x_int, self.weight)
             output = output_int * (self.activation_scale * self.scale)
 
         else:
@@ -161,7 +160,6 @@ def replace_linear_layer_with_activation(
     quantizer_class,
     weight_bits=8,
     activation_bits=16,
-    hidden_states=None,
     exclude_list=[],
     quantized=True,
 ):
@@ -182,7 +180,7 @@ def replace_linear_layer_with_activation(
                     layer_activations = hidden_states[custom_name]
 
                     layer_activations = torch.FloatTensor(layer_activations)
-                    max_abs = layer_activations.mean().item()
+                    max_abs = layer_activations.max().item()
                     bits = activation_bits
                     Qmax = 2 ** (bits - 1) - 1
                     layer_scale = max_abs / Qmax
@@ -210,7 +208,6 @@ def replace_linear_layer_with_activation(
                 quantizer_class=quantizer_class,
                 weight_bits=weight_bits,
                 activation_bits=activation_bits,
-                hidden_states=hidden_states,
                 exclude_list=exclude_list,
                 quantized=quantized,
             )
