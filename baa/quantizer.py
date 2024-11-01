@@ -91,7 +91,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             output = output_int * (self.activation_scale * self.scale)
 
         else:
-            output = F.linear(x, self.weight.to(x.dtype)) * self.scale
+            output = F.linear(x, self.weight) * self.scale
         if self.bias is not None:
             output += self.bias
         return output

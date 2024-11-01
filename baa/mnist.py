@@ -98,6 +98,6 @@ class MNIST:
         test_loss /= len(self.test_loader.dataset)
         accuracy = 100.0 * correct / len(self.test_loader.dataset)
         print(
-            f"\Model Test set: Average loss: {test_loss:.6f}, Accuracy: {correct}/{len(self.test_loader.dataset)}"
+            f"\nModel Test set: Average loss: {test_loss:.6f}, Accuracy: {correct}/{len(self.test_loader.dataset)}"
             f" ({accuracy:.2f}%)\n"
         )

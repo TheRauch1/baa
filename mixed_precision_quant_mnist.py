@@ -10,7 +10,7 @@ from baa.mnist import MNIST, Net
 
 load_dotenv()
 
-mnist = MNIST(device="cpu", batch_size=128, num_epochs=1, learning_rate=0.001)
+mnist = MNIST(device="cuda", batch_size=128, num_epochs=1, learning_rate=0.001)
 mnist.train()
 # model_name = "HuggingFaceTB/SmolLM-135M"
 # llm = AutoModelForCausalLM.from_pretrained(model_name, device_map=device_map)
@@ -45,10 +45,16 @@ def quantize_linear_layer(layer, bit_width):
 
 
 def compute_layer_error(original_output, quantized_output):
-    error = torch.nn.functional.mse_loss(
-        original_output, quantized_output, reduction="mean"
+    # error = torch.nn.functional.mse_loss(
+    #     original_output, quantized_output, reduction="mean"
+    # )
+
+    # error function with sqnr
+    sqnr = torch.mean(original_output**2) / torch.mean(
+        (original_output - quantized_output) ** 2
     )
-    return error
+    sqnr_db = 10 * torch.log10(sqnr)
+    return sqnr_db
 
 
 def replace_layer_in_model(model, layer_name, new_layer):
@@ -110,7 +116,7 @@ def quantize_layer_independently(model: Net, error_threshold, quantization_level
                 quantized_output = quantized_layer(original_input)
                 error = compute_layer_error(original_output, quantized_output)
 
-                if error <= error_threshold:
+                if error >= error_threshold:
                     min_error = error
                     best_bit_width = bit_width
                     best_quantized_layer = quantized_layer
@@ -129,7 +135,7 @@ def quantize_layer_independently(model: Net, error_threshold, quantization_level
 
 quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
 
-error_threshold = 1e-1
+error_threshold = 10
 
 quantized_model, layer_quantization_info = quantize_layer_independently(
     mnist.model, error_threshold, quantization_levels
