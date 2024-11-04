@@ -51,6 +51,11 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             torch.randn((out_features), dtype=dtype),
         )
 
+        self.register_buffer(
+            "zero_point",
+            torch.randn((out_features), dtype=dtype),
+        )
+
         if bias:
             self.register_buffer(
                 "bias",
@@ -65,19 +70,22 @@ class QuantizedLinearLayerWithActivation(nn.Module):
     def quantize(self, weight):
         weight_f32 = weight.detach().clone().to(torch.float32)
 
-        scale = weight_f32.abs().max(dim=-1).values / (
-            (self.weight_qmax - self.weight_qmin) // 2
+        scale = (weight_f32.max(dim=-1).values - weight_f32.min(dim=-1).values) / (
+            self.weight_qmax - self.weight_qmin
         )
-        scale = scale.to(weight.dtype)
+        zero_point = self.weight_qmin - weight_f32.min(dim=-1).values / scale
 
         quantized_weight = torch.clamp(
-            torch.round(weight_f32 / scale.unsqueeze(1)),
+            torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
             self.weight_qmin,
             self.weight_qmax,
         )
 
+        assert quantized_weight.shape == weight.shape
+
         self.weight = quantized_weight
         self.scale = scale
+        self.zero_point = zero_point
         torch.cuda.empty_cache()
 
     def forward(self, x):
@@ -91,7 +99,8 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             output = output_int * (self.activation_scale * self.scale)
 
         else:
-            output = F.linear(x, self.weight) * self.scale
+            adjusted_weight = torch.sub(self.weight, self.zero_point.unsqueeze(1))
+            output = F.linear(x, adjusted_weight) * self.scale
         if self.bias is not None:
             output += self.bias
         return output
