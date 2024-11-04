@@ -79,7 +79,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
             self.weight_qmin,
             self.weight_qmax,
-        )
+        ).to(torch.int8)
 
         assert quantized_weight.shape == weight.shape
 
@@ -93,13 +93,13 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             x_int = torch.round(torch.div(x, self.activation_scale)).clamp(
                 self.activation_qmin,
                 self.activation_qmax,
-            )
+            ).to
             assert x.shape == x_int.shape
-            output_int = F.linear(x_int, self.weight)
+            output_int = F.linear(x_int, self.weight.to(x.dtype))
             output = output_int * (self.activation_scale * self.scale)
 
         else:
-            adjusted_weight = torch.sub(self.weight, self.zero_point.unsqueeze(1))
+            adjusted_weight = torch.sub(self.weight.to(x.dtype), self.zero_point.unsqueeze(1))
             output = F.linear(x, adjusted_weight) * self.scale
         if self.bias is not None:
             output += self.bias

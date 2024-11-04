@@ -1,3 +1,5 @@
+import gc
+
 import torch
 from tqdm import tqdm
 
@@ -48,6 +50,10 @@ class AccuracyBenchmark:
             correct = (predictions == labels) & mask
             total_correct += correct.sum().item()
             total_tokens += mask.sum().item()
+
+            del input_ids, inputs, labels, outputs, logits, predictions, mask, correct
+            gc.collect()
+            torch.cuda.empty_cache()
 
             prev_end_idx = end_idx
             if end_idx == seq_len:
