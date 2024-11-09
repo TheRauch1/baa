@@ -75,14 +75,11 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         )
         zero_point = self.weight_qmin - weight_f32.min(dim=-1).values / scale
 
-        quantized_weight = (
-            torch.clamp(
-                torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
-                self.weight_qmin,
-                self.weight_qmax,
-            )
-            .to(torch.int8)
-        )
+        quantized_weight = torch.clamp(
+            torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
+            self.weight_qmin,
+            self.weight_qmax,
+        ).to(torch.int8)
 
         assert quantized_weight.shape == weight.shape
 
