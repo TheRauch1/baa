@@ -1,4 +1,4 @@
 *.ipynb filter=nbstripout
-visualizations/** filter=nbstripout -text
+# visualizations/** filter=nbstripout -text
 *.zpln filter=nbstripout
 *.ipynb diff=ipynb
