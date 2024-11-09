@@ -1,3 +1,4 @@
+import copy
 import gc
 from collections import OrderedDict
 from typing import Callable, Dict
@@ -325,3 +326,118 @@ def register_linear_layer_forward_hook(model, hook_fn):
     for name, module in model.named_modules():
         if isinstance(module, nn.Linear):
             module.register_forward_hook(hook_fn)
+
+
+class Quantizer:
+    def __init__(self, evaluation_fn) -> None:
+        self.evaluation_fn = evaluation_fn
+
+    def quantize_tensor(self, tensor: torch.Tensor, bit_width):
+        qmin = -(2 ** (bit_width - 1))
+        qmax = 2 ** (bit_width - 1) - 1
+
+        scale = tensor.abs().max() / qmax
+        tensor_q = (tensor / scale).round().clamp(qmin, qmax)
+        tensor_q = tensor_q * scale
+        return tensor_q
+
+    def quantize_linear_layer(self, layer: nn.Module, bit_width):
+        quantized_layer = copy.deepcopy(layer)
+
+        quantized_weight = self.quantize_tensor(layer.weight.data, bit_width)
+        quantized_layer.weight.data = quantized_weight
+
+        if layer.bias is not None:
+            quantized_bias = self.quantize_tensor(layer.bias.data, bit_width)
+            quantized_layer.bias.data = quantized_bias
+
+        return quantized_layer
+
+    def compute_layer_error(
+        self, original_output: torch.Tensor, quantized_output: torch.Tensor
+    ):
+        # error = nn.functional.mse_loss(
+        #     original_output, quantized_output, reduction="mean"
+        # )
+
+        # error function with sqnr
+        sqnr: torch.Tensor = torch.mean(original_output**2) / torch.mean(
+            (original_output - quantized_output) ** 2
+        )
+        sqnr_db: torch.Tensor = 10 * torch.log10(sqnr)
+        return sqnr_db
+
+    def replace_layer_in_model(
+        self, model: nn.Module, layer_name: nn.Module, new_layer: nn.Module
+    ):
+        modules = layer_name.split(".")
+        parent_module = model
+        for name in modules[:-1]:
+            parent_module = getattr(parent_module, name)
+        setattr(parent_module, modules[-1], new_layer)
+        torch.cuda.empty_cache()
+
+    def quantize_layer_independently(
+        self, model: nn.Module, error_threshold, quantization_levels
+    ):
+        quantized_model = copy.deepcopy(model)
+        layer_quantization_info = {}
+
+        layer_inputs_outputs = {}
+
+        hooks = []
+
+        def register_hooks():
+            for name, module in model.named_modules():
+                if isinstance(module, nn.Linear):
+
+                    def create_hook(name):
+                        def hook_fn(module, input, output):
+                            layer_inputs_outputs[name] = (
+                                input[0].detach(),
+                                output.detach(),
+                            )
+
+                        return hook_fn
+
+                    hook = module.register_forward_hook(create_hook(name))
+                    hooks.append(hook)
+
+        register_hooks()
+
+        with torch.no_grad():
+            self.evaluation_fn(model)
+
+        for hook in hooks:
+            hook.remove()
+
+        for name, module in model.named_modules():
+            if isinstance(module, nn.Linear):
+                print(f"Quantizing layer {name}")
+                original_input, original_output = layer_inputs_outputs[name]
+
+                min_error = float("inf")
+                best_bit_width = None
+                best_quantized_layer = None
+
+                for bit_width in quantization_levels:
+                    quantized_layer = self.quantize_linear_layer(module, bit_width)
+                    quantized_output = quantized_layer(original_input)
+                    error = self.compute_layer_error(original_output, quantized_output)
+
+                    if error >= error_threshold:
+                        min_error = error
+                        best_bit_width = bit_width
+                        best_quantized_layer = quantized_layer
+
+                    else:
+                        continue
+                if best_quantized_layer is not None:
+                    self.replace_layer_in_model(
+                        quantized_model, name, best_quantized_layer
+                    )
+                    layer_quantization_info[name] = (best_bit_width, min_error)
+                else:
+                    print(f"Could not quantize layer {name}")
+
+        return quantized_model, layer_quantization_info

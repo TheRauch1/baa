@@ -5,8 +5,6 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 class Net(nn.Module):
     def __init__(self):
@@ -37,8 +35,9 @@ class Net(nn.Module):
 
 
 class MNIST:
-    def __init__(self, device, batch_size, num_epochs, learning_rate):
-        self.model = Net().to(device)
+    def __init__(self, batch_size, num_epochs, learning_rate, device="cpu"):
+        self.device = device
+        self.model = Net().to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
         self.criterion = nn.CrossEntropyLoss()
         self.num_epochs = num_epochs
@@ -67,7 +66,7 @@ class MNIST:
         print("Training the model...")
         for epoch in range(self.num_epochs):
             for batch_idx, (data, target) in enumerate(self.train_loader):
-                data, target = data.to(device), target.to(device)
+                data, target = data.to(self.device), target.to(self.device)
                 self.optimizer.zero_grad()
                 output = self.model(data)
                 loss = self.criterion(output, target)
@@ -79,14 +78,16 @@ class MNIST:
                         f"\tLoss: {loss.item():.6f}"
                     )
 
-    def evaluate(self):
+    def evaluate(self, model=None):
+        if model is not None:
+            self.model = model
         self.model.eval()
         test_loss = 0
         correct = 0
         criterion = nn.CrossEntropyLoss()
         with torch.no_grad():
             for i, (data, target) in enumerate(self.test_loader):
-                data, target = data.to(device), target.to(device)
+                data, target = data.to(self.device), target.to(self.device)
                 output = self.model(data)
                 # if i == 0:
                 #     print(f"Output: {output}")
