@@ -10,7 +10,7 @@ from baa.mnist import MNIST, Net
 
 load_dotenv()
 
-mnist = MNIST(device="cuda", batch_size=128, num_epochs=1, learning_rate=0.001)
+mnist = MNIST(device="cpu", batch_size=128, num_epochs=1, learning_rate=0.001)
 mnist.train()
 # model_name = "HuggingFaceTB/SmolLM-135M"
 # llm = AutoModelForCausalLM.from_pretrained(model_name, device_map=device_map)
@@ -143,7 +143,7 @@ quantized_model, layer_quantization_info = quantize_layer_independently(
 
 print("\nLayerwise quantization info:")
 for layer_name, (bit_width, error) in layer_quantization_info.items():
-    print(f"Layer: {layer_name}, Bit width: {bit_width}, Error: {error}")
+    print(f"Layer: {layer_name}, Bit width: {bit_width}, Error: {error} dB")
 
 mnist.model = quantized_model
 mnist.evaluate()
