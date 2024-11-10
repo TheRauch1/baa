@@ -342,8 +342,14 @@ class Quantizer:
         return tensor_q
 
     def quantize_linear_layer(self, layer: nn.Module, bit_width):
-        quantized_layer = copy.deepcopy(layer)
+        # quantized_layer = copy.deepcopy(layer)
 
+        quantized_layer = nn.Linear(
+            layer.in_features,
+            layer.out_features,
+            bias=(layer.bias is not None),
+            device=layer.weight.device,
+        )
         quantized_weight = self.quantize_tensor(layer.weight.data, bit_width)
         quantized_layer.weight.data = quantized_weight
 
@@ -362,7 +368,7 @@ class Quantizer:
 
         # error function with sqnr
         sqnr: torch.Tensor = torch.mean(original_output**2) / torch.mean(
-            (original_output - quantized_output) ** 2
+            (original_output.detach().cpu() - quantized_output.detach().cpu()) ** 2
         )
         sqnr_db: torch.Tensor = 10 * torch.log10(sqnr)
         return sqnr_db
@@ -380,7 +386,7 @@ class Quantizer:
     def quantize_layer_independently(
         self, model: nn.Module, error_threshold, quantization_levels
     ):
-        quantized_model = copy.deepcopy(model)
+        quantized_model = model
         layer_quantization_info = {}
 
         layer_inputs_outputs = {}
@@ -394,8 +400,8 @@ class Quantizer:
                     def create_hook(name):
                         def hook_fn(module, input, output):
                             layer_inputs_outputs[name] = (
-                                input[0].detach(),
-                                output.detach(),
+                                input[0].detach().cpu(),
+                                output.detach().cpu(),
                             )
 
                         return hook_fn
@@ -422,7 +428,10 @@ class Quantizer:
 
                 for bit_width in quantization_levels:
                     quantized_layer = self.quantize_linear_layer(module, bit_width)
-                    quantized_output = quantized_layer(original_input)
+                    quantized_output = quantized_layer(
+                        original_input.to(quantized_layer.weight.device)
+                    )
+
                     error = self.compute_layer_error(original_output, quantized_output)
 
                     if error >= error_threshold:
@@ -432,12 +441,19 @@ class Quantizer:
 
                     else:
                         continue
+
                 if best_quantized_layer is not None:
                     self.replace_layer_in_model(
                         quantized_model, name, best_quantized_layer
                     )
+
                     layer_quantization_info[name] = (best_bit_width, min_error)
+                    print(
+                        "Max memory allocation (GB):",
+                        torch.cuda.max_memory_allocated() / 1e9,
+                    )
+
                 else:
                     print(f"Could not quantize layer {name}")
 
-        return quantized_model, layer_quantization_info
+        return layer_quantization_info

@@ -12,15 +12,16 @@ from baa.quantizer import Quantizer
 load_dotenv()
 
 model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
+# model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
+# model_name = "meta-llama/Llama-3.2-1B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
-benchmark = AccuracyBenchmark(model, tokenizer, dataset)
 
 
 def evaluation_fn(model):
-    benchmark.model = model
-    benchmark.evaluate(sample_size=200)
+    dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
+    benchmark = AccuracyBenchmark(model, tokenizer, dataset)
+    print(benchmark.evaluate(sample_size=200))
 
 
 quantizer = Quantizer(evaluation_fn=evaluation_fn)
@@ -30,7 +31,7 @@ quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
 
 error_threshold = 15
 
-quantized_model, layer_quantization_info = quantizer.quantize_layer_independently(
+layer_quantization_info = quantizer.quantize_layer_independently(
     model, error_threshold, quantization_levels
 )
 
@@ -43,6 +44,7 @@ average_bit_width = sum(
 ) / len(layer_quantization_info)
 
 print(f"Average bit width: {average_bit_width}")
-benchmark.model = quantized_model
-acc = benchmark.evaluate(sample_size=200)
-print(f"Accuracy of quantized model: {acc}")
+# benchmark.model = quantized_model
+evaluation_fn(model)
+# acc = benchmark.evaluate(sample_size=100)
+# print(f"Accuracy of quantized model: {acc}")
