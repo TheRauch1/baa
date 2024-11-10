@@ -1,4 +1,5 @@
 import copy
+import os
 
 import torch
 from datasets import load_dataset
@@ -10,11 +11,16 @@ from baa.mnist import MNIST, Net
 from baa.quantizer import Quantizer
 
 load_dotenv()
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
+    "garbage_collection_threshold:0.8"
+    # "backend:cudaMallocAsync"
+)
 
-model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
+# model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
 # model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
-# model_name = "meta-llama/Llama-3.2-1B-Instruct"
+model_name = "meta-llama/Llama-3.2-1B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+original_device = model.device
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 
@@ -45,6 +51,6 @@ average_bit_width = sum(
 
 print(f"Average bit width: {average_bit_width}")
 # benchmark.model = quantized_model
-evaluation_fn(model)
+evaluation_fn(model.to(original_device))
 # acc = benchmark.evaluate(sample_size=100)
 # print(f"Accuracy of quantized model: {acc}")

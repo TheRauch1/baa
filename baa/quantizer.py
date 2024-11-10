@@ -331,6 +331,7 @@ def register_linear_layer_forward_hook(model, hook_fn):
 class Quantizer:
     def __init__(self, evaluation_fn) -> None:
         self.evaluation_fn = evaluation_fn
+        self.old_gc_objects = None
 
     def quantize_tensor(self, tensor: torch.Tensor, bit_width):
         qmin = -(2 ** (bit_width - 1))
@@ -373,6 +374,18 @@ class Quantizer:
         sqnr_db: torch.Tensor = 10 * torch.log10(sqnr)
         return sqnr_db
 
+    def print_gc_objects(self):
+        counter = 0
+        for obj in gc.get_objects():
+            try:
+                if torch.is_tensor(obj) or (
+                    hasattr(obj, "data") and torch.is_tensor(obj.data)
+                ):
+                    counter += 1
+            except:
+                pass
+        print(counter)
+
     def replace_layer_in_model(
         self, model: nn.Module, layer_name: nn.Module, new_layer: nn.Module
     ):
@@ -380,80 +393,97 @@ class Quantizer:
         parent_module = model
         for name in modules[:-1]:
             parent_module = getattr(parent_module, name)
+        getattr(parent_module, modules[-1]).to("cpu")
         setattr(parent_module, modules[-1], new_layer)
+        getattr(parent_module, modules[-1]).to(new_layer.weight.device)
+        gc.collect()
         torch.cuda.empty_cache()
 
     def quantize_layer_independently(
         self, model: nn.Module, error_threshold, quantization_levels
     ):
-        quantized_model = model
-        layer_quantization_info = {}
+        with torch.no_grad():
+            quantized_model = model
+            layer_quantization_info = {}
 
-        layer_inputs_outputs = {}
+            layer_inputs_outputs = {}
 
-        hooks = []
+            hooks = []
 
-        def register_hooks():
+            def register_hooks():
+                for name, module in model.named_modules():
+                    if isinstance(module, nn.Linear):
+
+                        def create_hook(name):
+                            def hook_fn(module, input, output):
+                                layer_inputs_outputs[name] = (
+                                    input[0].detach().cpu(),
+                                    output.detach().cpu(),
+                                )
+
+                            return hook_fn
+
+                        hook = module.register_forward_hook(create_hook(name))
+                        hooks.append(hook)
+
+            register_hooks()
+
+            with torch.no_grad():
+                self.evaluation_fn(model)
+
+            for hook in hooks:
+                hook.remove()
+
             for name, module in model.named_modules():
                 if isinstance(module, nn.Linear):
+                    print(f"Quantizing layer {name}")
+                    original_input, original_output = layer_inputs_outputs[name]
 
-                    def create_hook(name):
-                        def hook_fn(module, input, output):
-                            layer_inputs_outputs[name] = (
-                                input[0].detach().cpu(),
-                                output.detach().cpu(),
-                            )
+                    min_error = float("inf")
+                    best_bit_width = None
+                    best_quantized_layer = None
 
-                        return hook_fn
+                    for bit_width in quantization_levels:
+                        memory_used = torch.cuda.memory_allocated()
+                        quantized_layer = self.quantize_linear_layer(module, bit_width)
+                        print(
+                            "Diff in memory used (GB):",
+                            (torch.cuda.memory_allocated() - memory_used) / 1e9,
+                        )
+                        quantized_output = quantized_layer(
+                            original_input.to(quantized_layer.weight.device)
+                        )
 
-                    hook = module.register_forward_hook(create_hook(name))
-                    hooks.append(hook)
+                        error = self.compute_layer_error(
+                            original_output, quantized_output
+                        )
 
-        register_hooks()
+                        if error >= error_threshold:
+                            min_error = error
+                            best_bit_width = bit_width
+                            best_quantized_layer = quantized_layer
+                        torch.cuda.empty_cache()
 
-        with torch.no_grad():
-            self.evaluation_fn(model)
+                    if best_quantized_layer is not None:
+                        self.replace_layer_in_model(
+                            quantized_model, name, best_quantized_layer
+                        )
 
-        for hook in hooks:
-            hook.remove()
-
-        for name, module in model.named_modules():
-            if isinstance(module, nn.Linear):
-                print(f"Quantizing layer {name}")
-                original_input, original_output = layer_inputs_outputs[name]
-
-                min_error = float("inf")
-                best_bit_width = None
-                best_quantized_layer = None
-
-                for bit_width in quantization_levels:
-                    quantized_layer = self.quantize_linear_layer(module, bit_width)
-                    quantized_output = quantized_layer(
-                        original_input.to(quantized_layer.weight.device)
-                    )
-
-                    error = self.compute_layer_error(original_output, quantized_output)
-
-                    if error >= error_threshold:
-                        min_error = error
-                        best_bit_width = bit_width
-                        best_quantized_layer = quantized_layer
+                        layer_quantization_info[name] = (best_bit_width, min_error)
+                        # print(
+                        #     "Max memory allocation (GB):",
+                        #     torch.cuda.max_memory_allocated() / 1e9,
+                        # )
+                        # print(
+                        #     "Memory used (GB):",
+                        #     torch.cuda.memory_allocated() / 1e9,
+                        # )
+                        # print(
+                        #     "Memory reserved (GB):",
+                        #     torch.cuda.memory_reserved() / 1e9,
+                        # )
 
                     else:
-                        continue
+                        print(f"Could not quantize layer {name}")
 
-                if best_quantized_layer is not None:
-                    self.replace_layer_in_model(
-                        quantized_model, name, best_quantized_layer
-                    )
-
-                    layer_quantization_info[name] = (best_bit_width, min_error)
-                    print(
-                        "Max memory allocation (GB):",
-                        torch.cuda.max_memory_allocated() / 1e9,
-                    )
-
-                else:
-                    print(f"Could not quantize layer {name}")
-
-        return layer_quantization_info
+            return layer_quantization_info
