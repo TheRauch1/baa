@@ -337,9 +337,29 @@ class Quantizer:
         qmin = -(2 ** (bit_width - 1))
         qmax = 2 ** (bit_width - 1) - 1
 
-        scale = tensor.abs().max() / qmax
-        tensor_q = (tensor / scale).round().clamp(qmin, qmax)
-        tensor_q = tensor_q * scale
+        # tensor_q = tensor.clone()
+        # scale = tensor.abs().max() / qmax
+        # tensor_q = (tensor_q / scale).round().clamp(qmin, qmax)
+        # tensor_q = tensor_q * scale
+
+        # use min and max of tensor to calculate scale
+        # scale = (tensor.max() - tensor.min()) / (qmax - qmin)
+        # zero_point = qmin - tensor.min() / scale
+        # tensor_q = (
+        #     torch.clamp(torch.round(tensor / scale - zero_point), qmin, qmax) * scale
+        #     + zero_point
+        # )
+
+        scale_min = tensor.quantile(0.05, dim=0)
+        scale_max = tensor.quantile(0.95, dim=0)
+
+        tensor_q = tensor.clone()
+        scale = (qmax - qmin) / (scale_max - scale_min)
+        zero_point = (-scale * scale_min).round() - scale_max
+        # quantize
+        tensor_q = torch.round(scale * tensor + zero_point)
+        # dequantize
+        tensor_q = (tensor_q - zero_point) / scale
         return tensor_q
 
     def quantize_linear_layer(self, layer: nn.Module, bit_width):
@@ -444,15 +464,11 @@ class Quantizer:
                     best_quantized_layer = None
 
                     for bit_width in quantization_levels:
-                        memory_used = torch.cuda.memory_allocated()
                         quantized_layer = self.quantize_linear_layer(module, bit_width)
-                        print(
-                            "Diff in memory used (GB):",
-                            (torch.cuda.memory_allocated() - memory_used) / 1e9,
-                        )
                         quantized_output = quantized_layer(
                             original_input.to(quantized_layer.weight.device)
                         )
+                        torch.cuda.empty_cache()
 
                         error = self.compute_layer_error(
                             original_output, quantized_output

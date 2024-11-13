@@ -1,4 +1,4 @@
-from .AccuracyBenchmark import AccuracyBenchmark
+from .AccuracyBenchmark import AccuracyBenchmark, LLMAccuracyBenchmark
 from .constants import device_map
 from .PerplexityBenchmark import PerplexityBenchmark
 from .quantizer import (
@@ -21,6 +21,7 @@ __all__ = [
     "print_memory_usage",
     "device_map",
     "AccuracyBenchmark",
+    "LLMAccuracyBenchmark",
     "QuantizedLinearLayer",
     "QuantizedLinearLayerWithActivation",
     "add_custom_name_to_linear_layers",

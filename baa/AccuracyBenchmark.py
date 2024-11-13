@@ -61,3 +61,87 @@ class AccuracyBenchmark:
 
         accuracy = total_correct / total_tokens if total_tokens > 0 else 0
         return accuracy
+
+
+import torch
+from datasets import load_dataset
+from torch.utils.data import DataLoader, TensorDataset
+
+
+class LLMAccuracyBenchmark:
+    def __init__(
+        self,
+        model,
+        tokenizer,
+        dataset,
+        sequence_length: int = 512,
+        num_samples: int = 1000,
+        batch_size: int = 8,
+    ):
+        """
+        Initializes the LLMAccuracyBenchmark class.
+
+        Args:
+            model (PreTrainedModel): Model to evaluate.
+            tokenizer (AutoTokenizer): Tokenizer for the model.
+            dataset (Dataset): Dataset to evaluate on.
+            sequence_length (int): The desired sequence length.
+            num_samples (int): The number of samples to use.
+            batch_size (int): Batch size for evaluation.
+        """
+        self.model = model
+        self.tokenizer = tokenizer
+        self.dataset = dataset
+        self.sequence_length = sequence_length
+        self.num_samples = num_samples
+        self.batch_size = batch_size
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model.to(self.device)
+        self.input_ids = None
+
+        # Load and prepare data
+        self.prepare_data()
+
+    def prepare_data(self):
+        """
+        Prepares the data by tokenizing and chunking the text into sequences.
+        """
+        # Load the dataset
+        # Select a subset of the dataset
+        texts = self.dataset["text"][: self.num_samples]
+        # Tokenize and chunk the texts into sequences of the specified length
+        encodings = self.tokenizer("\n\n".join(texts), return_tensors="pt")
+        input_ids = encodings["input_ids"][0]
+        total_length = input_ids.size(0)
+        num_sequences = total_length // self.sequence_length
+        input_ids = input_ids[: num_sequences * self.sequence_length]
+        input_ids = input_ids.view(num_sequences, self.sequence_length)
+        self.input_ids = input_ids
+
+    def evaluate(self):
+        """
+        Evaluates the model on the prepared data and prints the token-level accuracy.
+        """
+        if self.input_ids is None:
+            raise ValueError("Data not prepared.")
+        self.model.eval()
+        dataset = TensorDataset(self.input_ids)
+        dataloader = DataLoader(dataset, batch_size=self.batch_size)
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for batch in tqdm(dataloader):
+                input_ids = batch[0].to(self.device)
+                # Prepare inputs and labels by shifting the input_ids
+                inputs = input_ids[:, :-1]
+                labels = input_ids[:, 1:]
+                outputs = self.model(inputs)
+                logits = (
+                    outputs.logits
+                )  # shape: (batch_size, seq_length - 1, vocab_size)
+                predictions = torch.argmax(logits, dim=-1)
+                # Compare predictions with labels
+                correct += (predictions == labels).sum().item()
+                total += labels.numel()
+        accuracy = correct / total
+        print(f"Token-level accuracy: {accuracy:.4f}")

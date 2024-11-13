@@ -6,7 +6,7 @@ from datasets import load_dataset
 from dotenv import load_dotenv
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from baa import AccuracyBenchmark, device_map
+from baa import LLMAccuracyBenchmark, device_map
 from baa.mnist import MNIST, Net
 from baa.quantizer import Quantizer
 
@@ -16,7 +16,6 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
     # "backend:cudaMallocAsync"
 )
 
-# model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
 # model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
 model_name = "meta-llama/Llama-3.2-1B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
@@ -26,8 +25,15 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 def evaluation_fn(model):
     dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
-    benchmark = AccuracyBenchmark(model, tokenizer, dataset)
-    print(benchmark.evaluate(sample_size=200))
+    benchmark = LLMAccuracyBenchmark(
+        model=model,
+        tokenizer=tokenizer,
+        dataset=dataset,
+        sequence_length=512,
+        num_samples=1000,
+        batch_size=1,
+    )
+    print(benchmark.evaluate())
 
 
 quantizer = Quantizer(evaluation_fn=evaluation_fn)
