@@ -16,8 +16,8 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
     # "backend:cudaMallocAsync"
 )
 
-# model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
-model_name = "meta-llama/Llama-3.2-1B-Instruct"
+model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
+# model_name = "meta-llama/Llama-3.2-1B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 original_device = model.device
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -30,7 +30,7 @@ def evaluation_fn(model):
         tokenizer=tokenizer,
         dataset=dataset,
         sequence_length=512,
-        num_samples=1000,
+        num_samples=100,
         batch_size=1,
     )
     print(benchmark.evaluate())
@@ -41,7 +41,7 @@ quantizer = Quantizer(evaluation_fn=evaluation_fn)
 
 quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
 
-error_threshold = 15
+error_threshold = 20
 
 layer_quantization_info = quantizer.quantize_layer_independently(
     model, error_threshold, quantization_levels

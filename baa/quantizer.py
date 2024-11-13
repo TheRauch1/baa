@@ -357,7 +357,7 @@ class Quantizer:
         scale = (qmax - qmin) / (scale_max - scale_min)
         zero_point = (-scale * scale_min).round() - scale_max
         # quantize
-        tensor_q = torch.round(scale * tensor + zero_point)
+        tensor_q = torch.round(scale * tensor_q + zero_point)
         # dequantize
         tensor_q = (tensor_q - zero_point) / scale
         return tensor_q
@@ -393,18 +393,6 @@ class Quantizer:
         )
         sqnr_db: torch.Tensor = 10 * torch.log10(sqnr)
         return sqnr_db
-
-    def print_gc_objects(self):
-        counter = 0
-        for obj in gc.get_objects():
-            try:
-                if torch.is_tensor(obj) or (
-                    hasattr(obj, "data") and torch.is_tensor(obj.data)
-                ):
-                    counter += 1
-            except:
-                pass
-        print(counter)
 
     def replace_layer_in_model(
         self, model: nn.Module, layer_name: nn.Module, new_layer: nn.Module
@@ -469,6 +457,7 @@ class Quantizer:
                             original_input.to(quantized_layer.weight.device)
                         )
                         torch.cuda.empty_cache()
+                        # print(torch.cuda.memory_stats())
 
                         error = self.compute_layer_error(
                             original_output, quantized_output
