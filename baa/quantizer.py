@@ -389,7 +389,8 @@ class Quantizer:
 
         # error function with sqnr
         sqnr: torch.Tensor = torch.mean(original_output**2) / torch.mean(
-            (original_output.detach().cpu() - quantized_output.detach().cpu()) ** 2
+            # (original_output.detach().cpu() - quantized_output.detach().cpu()) ** 2
+            (original_output.to(quantized_output.device) - quantized_output) ** 2
         )
         sqnr_db: torch.Tensor = 10 * torch.log10(sqnr)
         return sqnr_db
@@ -403,9 +404,9 @@ class Quantizer:
             parent_module = getattr(parent_module, name)
         getattr(parent_module, modules[-1]).to("cpu")
         setattr(parent_module, modules[-1], new_layer)
-        getattr(parent_module, modules[-1]).to(new_layer.weight.device)
-        gc.collect()
-        torch.cuda.empty_cache()
+        # getattr(parent_module, modules[-1]).to(new_layer.weight.device)
+        # gc.collect()
+        # torch.cuda.empty_cache()
 
     def quantize_layer_independently(
         self, model: nn.Module, error_threshold, quantization_levels
@@ -450,6 +451,9 @@ class Quantizer:
                     min_error = float("inf")
                     best_bit_width = None
                     best_quantized_layer = None
+
+                    # if "lm_head" in name:
+                    #     module.to("cpu")
 
                     for bit_width in quantization_levels:
                         quantized_layer = self.quantize_linear_layer(module, bit_width)

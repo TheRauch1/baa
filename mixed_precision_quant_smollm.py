@@ -16,9 +16,9 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
     # "backend:cudaMallocAsync"
 )
 
-model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
-# model_name = "meta-llama/Llama-3.2-1B-Instruct"
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+# model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
+model_name = "meta-llama/Llama-3.2-3B-Instruct"
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="cuda")
 original_device = model.device
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
