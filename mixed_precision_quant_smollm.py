@@ -1,4 +1,5 @@
 import copy
+import gc
 import os
 
 import torch
@@ -17,9 +18,9 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
 )
 
 # model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
-model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
-# model_name = "meta-llama/Llama-3.2-3B-Instruct"
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="cuda")
+# model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
+model_name = "meta-llama/Llama-3.2-3B-Instruct"
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 original_device = model.device
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
@@ -39,14 +40,16 @@ def evaluation_fn(model):
 
 quantizer = Quantizer(evaluation_fn=evaluation_fn)
 
-
-quantization_levels = [4]
+# quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
+quantization_levels = [5, 4, 3, 2]
 
 error_threshold = 20
 
 layer_quantization_info = quantizer.quantize_layer_independently(
     model, error_threshold, quantization_levels
 )
+
+model.save_pretrained("/tmp/quantized_model")
 
 print("\nLayerwise quantization info:")
 for layer_name, (bit_width, error) in layer_quantization_info.items():
@@ -59,6 +62,12 @@ average_bit_width = sum(
 print(f"Average bit width: {average_bit_width}")
 # benchmark.model = quantized_model
 # evaluation_fn(model.to(original_device))
+# model.model.embed_tokens.to("cuda")
+# reapply original devices
+del model
+gc.collect()
+torch.cuda.empty_cache()
+model = AutoModelForCausalLM.from_pretrained("/tmp/quantized_model", device_map="auto")
 evaluation_fn(model)
 # acc = benchmark.evaluate(sample_size=100)
 # print(f"Accuracy of quantized model: {acc}")

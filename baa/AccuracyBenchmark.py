@@ -96,7 +96,7 @@ class LLMAccuracyBenchmark:
         self.num_samples = num_samples
         self.batch_size = batch_size
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
+        # self.model.to(self.device)
         self.input_ids = None
 
         # Load and prepare data
@@ -124,14 +124,14 @@ class LLMAccuracyBenchmark:
         """
         if self.input_ids is None:
             raise ValueError("Data not prepared.")
-        self.model.eval()
+        # self.model.eval()
         dataset = TensorDataset(self.input_ids)
         dataloader = DataLoader(dataset, batch_size=self.batch_size)
         correct = 0
         total = 0
         with torch.no_grad():
             for batch in tqdm(dataloader):
-                input_ids = batch[0].to(self.device)
+                input_ids = batch[0]
                 # input_ids = batch[0]
                 # Prepare inputs and labels by shifting the input_ids
                 inputs = input_ids[:, :-1]

@@ -356,7 +356,7 @@ class Quantizer:
             sorted_tensor = torch.sort(tensor, dim=0).values
             scale_min = sorted_tensor[int(tensor.shape[0] * 0.05)]
             scale_max = sorted_tensor[int(tensor.shape[0] * 0.95)]
-        except torch.cuda.OutOfMemoryError as e:
+        except Exception as e:
             gc.collect()
             torch.cuda.empty_cache()
             out_of_memory = True
@@ -369,9 +369,9 @@ class Quantizer:
             torch.cuda.empty_cache()
 
         # scale_min = tensor.quantile(0.05, dim=0)
-        scale_min = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.05)]
+        # scale_min = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.05)]
         # scale_max = tensor.quantile(0.95, dim=0)
-        scale_max = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.95)]
+        # scale_max = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.95)]
 
         tensor_q = tensor.clone()
         scale = (qmax - qmin) / (scale_max - scale_min)
@@ -389,7 +389,7 @@ class Quantizer:
             layer.in_features,
             layer.out_features,
             bias=(layer.bias is not None),
-            device=layer.weight.device,
+            # device=layer.weight.device,
             dtype=torch.float16,
         )
         quantized_weight = self.quantize_tensor(layer.weight.data, bit_width)
@@ -423,8 +423,10 @@ class Quantizer:
         parent_module = model
         for name in modules[:-1]:
             parent_module = getattr(parent_module, name)
-        getattr(parent_module, modules[-1]).to("cpu")
-        setattr(parent_module, modules[-1], new_layer)
+        old_layer = getattr(parent_module, modules[-1])
+        device = old_layer.weight.data
+        old_layer.to("cpu")
+        setattr(parent_module, modules[-1], new_layer.to(device))
         # getattr(parent_module, modules[-1]).to(new_layer.weight.device)
         # gc.collect()
         # torch.cuda.empty_cache()
