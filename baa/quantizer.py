@@ -6,6 +6,7 @@ from typing import Callable, Dict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from tqdm import tqdm
 
 from baa.singletons import hidden_states, names
 
@@ -350,8 +351,27 @@ class Quantizer:
         #     + zero_point
         # )
 
-        scale_min = tensor.quantile(0.05, dim=0)
-        scale_max = tensor.quantile(0.95, dim=0)
+        out_of_memory = False
+        try:
+            sorted_tensor = torch.sort(tensor, dim=0).values
+            scale_min = sorted_tensor[int(tensor.shape[0] * 0.05)]
+            scale_max = sorted_tensor[int(tensor.shape[0] * 0.95)]
+        except torch.cuda.OutOfMemoryError as e:
+            gc.collect()
+            torch.cuda.empty_cache()
+            out_of_memory = True
+            sorted_tensor = torch.sort(tensor.cpu(), dim=0).values
+            scale_min = sorted_tensor[int(tensor.shape[0] * 0.05)].to(tensor.device)
+            scale_max = sorted_tensor[int(tensor.shape[0] * 0.95)].to(tensor.device)
+
+        if out_of_memory:
+            gc.collect()
+            torch.cuda.empty_cache()
+
+        # scale_min = tensor.quantile(0.05, dim=0)
+        scale_min = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.05)]
+        # scale_max = tensor.quantile(0.95, dim=0)
+        scale_max = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.95)]
 
         tensor_q = tensor.clone()
         scale = (qmax - qmin) / (scale_max - scale_min)
@@ -370,6 +390,7 @@ class Quantizer:
             layer.out_features,
             bias=(layer.bias is not None),
             device=layer.weight.device,
+            dtype=torch.float16,
         )
         quantized_weight = self.quantize_tensor(layer.weight.data, bit_width)
         quantized_layer.weight.data = quantized_weight
@@ -389,7 +410,8 @@ class Quantizer:
 
         # error function with sqnr
         sqnr: torch.Tensor = torch.mean(original_output**2) / torch.mean(
-            (original_output.detach().cpu() - quantized_output.detach().cpu()) ** 2
+            # (original_output.detach().cpu() - quantized_output.detach().cpu()) ** 2
+            (original_output.to(quantized_output.device) - quantized_output) ** 2
         )
         sqnr_db: torch.Tensor = 10 * torch.log10(sqnr)
         return sqnr_db
@@ -403,9 +425,9 @@ class Quantizer:
             parent_module = getattr(parent_module, name)
         getattr(parent_module, modules[-1]).to("cpu")
         setattr(parent_module, modules[-1], new_layer)
-        getattr(parent_module, modules[-1]).to(new_layer.weight.device)
-        gc.collect()
-        torch.cuda.empty_cache()
+        # getattr(parent_module, modules[-1]).to(new_layer.weight.device)
+        # gc.collect()
+        # torch.cuda.empty_cache()
 
     def quantize_layer_independently(
         self, model: nn.Module, error_threshold, quantization_levels
@@ -451,7 +473,7 @@ class Quantizer:
                     best_bit_width = None
                     best_quantized_layer = None
 
-                    for bit_width in quantization_levels:
+                    for bit_width in tqdm(quantization_levels):
                         quantized_layer = self.quantize_linear_layer(module, bit_width)
                         quantized_output = quantized_layer(
                             original_input.to(quantized_layer.weight.device)

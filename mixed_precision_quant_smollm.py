@@ -16,9 +16,10 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
     # "backend:cudaMallocAsync"
 )
 
-model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
-# model_name = "meta-llama/Llama-3.2-1B-Instruct"
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+# model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
+model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
+# model_name = "meta-llama/Llama-3.2-3B-Instruct"
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="cuda")
 original_device = model.device
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
@@ -39,7 +40,7 @@ def evaluation_fn(model):
 quantizer = Quantizer(evaluation_fn=evaluation_fn)
 
 
-quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
+quantization_levels = [4]
 
 error_threshold = 20
 
@@ -57,6 +58,7 @@ average_bit_width = sum(
 
 print(f"Average bit width: {average_bit_width}")
 # benchmark.model = quantized_model
-evaluation_fn(model.to(original_device))
+# evaluation_fn(model.to(original_device))
+evaluation_fn(model)
 # acc = benchmark.evaluate(sample_size=100)
 # print(f"Accuracy of quantized model: {acc}")
