@@ -372,7 +372,7 @@ class Quantizer:
         scale = (qmax - qmin) / (scale_max - scale_min)
         zero_point = (-scale * scale_min).round() - scale_max
         # quantize
-        tensor_q.multiply_(scale).add_(zero_point).round_().clamp_(qmin, qmax)
+        tensor_q.multiply_(scale).add_(zero_point).round_()
         # dequantize
         tensor_q.sub_(zero_point).div_(scale)
         return tensor_q
