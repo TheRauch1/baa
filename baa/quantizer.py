@@ -332,7 +332,6 @@ def register_linear_layer_forward_hook(model, hook_fn):
 class Quantizer:
     def __init__(self, evaluation_fn) -> None:
         self.evaluation_fn = evaluation_fn
-        self.old_gc_objects = None
 
     def quantize_tensor(self, tensor: torch.Tensor, bit_width):
         qmin = -(2 ** (bit_width - 1))
@@ -351,20 +350,16 @@ class Quantizer:
         #     + zero_point
         # )
 
-        out_of_memory = False
         try:
-            sorted_tensor = torch.sort(tensor, dim=0).values
-            scale_min = sorted_tensor[int(tensor.shape[0] * 0.05)]
-            scale_max = sorted_tensor[int(tensor.shape[0] * 0.95)]
-        except Exception as e:
+            scale_min = tensor.quantile(0.05, dim=0)
+            scale_max = tensor.quantile(0.95, dim=0)
+        except (torch.OutOfMemoryError, torch.cuda.OutOfMemoryError):
             gc.collect()
             torch.cuda.empty_cache()
-            out_of_memory = True
-            sorted_tensor = torch.sort(tensor.cpu(), dim=0).values
-            scale_min = sorted_tensor[int(tensor.shape[0] * 0.05)].to(tensor.device)
-            scale_max = sorted_tensor[int(tensor.shape[0] * 0.95)].to(tensor.device)
-
-        if out_of_memory:
+            t = tensor.cpu()
+            scale_min = t.quantile(0.05, dim=0).to(tensor.device)
+            scale_max = t.quantile(0.95, dim=0).to(tensor.device)
+            del t
             gc.collect()
             torch.cuda.empty_cache()
 
@@ -377,14 +372,12 @@ class Quantizer:
         scale = (qmax - qmin) / (scale_max - scale_min)
         zero_point = (-scale * scale_min).round() - scale_max
         # quantize
-        tensor_q = torch.round(scale * tensor_q + zero_point)
+        tensor_q.multiply_(scale).add_(zero_point).round()
         # dequantize
-        tensor_q = (tensor_q - zero_point) / scale
+        tensor_q.sub_(zero_point).div_(scale)
         return tensor_q
 
     def quantize_linear_layer(self, layer: nn.Module, bit_width):
-        # quantized_layer = copy.deepcopy(layer)
-
         quantized_layer = nn.Linear(
             layer.in_features,
             layer.out_features,
@@ -423,13 +416,30 @@ class Quantizer:
         parent_module = model
         for name in modules[:-1]:
             parent_module = getattr(parent_module, name)
-        old_layer = getattr(parent_module, modules[-1])
-        device = old_layer.weight.data
-        old_layer.to("cpu")
+        device = getattr(parent_module, modules[-1]).weight.device
+        old_layer = getattr(parent_module, modules[-1]).to("cpu")
         setattr(parent_module, modules[-1], new_layer.to(device))
+
+        # Clear parameters and buffers
+        old_layer._parameters = {k: None for k in old_layer._parameters}
+        old_layer._buffers = {k: None for k in old_layer._buffers}
+
+        # Clear hooks
+        if hasattr(old_layer, "_backward_hooks"):
+            old_layer._backward_hooks.clear()
+        if hasattr(old_layer, "_forward_hooks"):
+            old_layer._forward_hooks.clear()
+        if hasattr(old_layer, "_forward_pre_hooks"):
+            old_layer._forward_pre_hooks.clear()
+        if hasattr(old_layer, "_state_dict_hooks"):
+            old_layer._state_dict_hooks.clear()
+        if hasattr(old_layer, "_load_state_dict_pre_hooks"):
+            old_layer._load_state_dict_pre_hooks.clear()
+
+        del old_layer
         # getattr(parent_module, modules[-1]).to(new_layer.weight.device)
-        # gc.collect()
-        # torch.cuda.empty_cache()
+        gc.collect()
+        torch.cuda.empty_cache()
 
     def quantize_layer_independently(
         self, model: nn.Module, error_threshold, quantization_levels

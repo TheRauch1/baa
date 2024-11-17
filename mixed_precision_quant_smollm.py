@@ -12,14 +12,10 @@ from baa.mnist import MNIST, Net
 from baa.quantizer import Quantizer
 
 load_dotenv()
-os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
-    "garbage_collection_threshold:0.8"
-    # "backend:cudaMallocAsync"
-)
 
 # model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
-# model_name = "HuggingFaceTB/SmolLM-1.7B-Instruct"
-model_name = "meta-llama/Llama-3.2-3B-Instruct"
+# model_name = "meta-llama/Llama-3.2-3B-Instruct"
+model_name = "meta-llama/Llama-3.1-8B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 original_device = model.device
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -40,8 +36,8 @@ def evaluation_fn(model):
 
 quantizer = Quantizer(evaluation_fn=evaluation_fn)
 
-# quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
-quantization_levels = [5, 4, 3, 2]
+quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
+# quantization_levels = [5, 4]
 
 error_threshold = 20
 
