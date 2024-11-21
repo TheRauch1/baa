@@ -330,8 +330,10 @@ def register_linear_layer_forward_hook(model, hook_fn):
 
 
 class Quantizer:
-    def __init__(self, evaluation_fn) -> None:
+    def __init__(self, evaluation_fn, min_quantile, max_quantile) -> None:
         self.evaluation_fn = evaluation_fn
+        self.min_quantile = min_quantile
+        self.max_quantile = max_quantile
 
     def quantize_tensor(self, tensor: torch.Tensor, bit_width):
         qmin = -(2 ** (bit_width - 1))
@@ -351,14 +353,14 @@ class Quantizer:
         # )
 
         try:
-            scale_min = tensor.quantile(0.05, dim=0)
-            scale_max = tensor.quantile(0.95, dim=0)
+            scale_min = tensor.quantile(self.min_quantile, dim=0)
+            scale_max = tensor.quantile(self.max_quantile, dim=0)
         except (torch.OutOfMemoryError, torch.cuda.OutOfMemoryError):
             gc.collect()
             torch.cuda.empty_cache()
             t = tensor.cpu()
-            scale_min = t.quantile(0.05, dim=0).to(tensor.device)
-            scale_max = t.quantile(0.95, dim=0).to(tensor.device)
+            scale_min = t.quantile(self.min_quantile, dim=0).to(tensor.device)
+            scale_max = t.quantile(self.max_quantile, dim=0).to(tensor.device)
             del t
             gc.collect()
             torch.cuda.empty_cache()
@@ -471,7 +473,7 @@ class Quantizer:
             register_hooks()
 
             with torch.no_grad():
-                self.evaluation_fn(model)
+                original_model_accuracy = self.evaluation_fn(model)
 
             for hook in hooks:
                 hook.remove()
@@ -508,7 +510,10 @@ class Quantizer:
                             quantized_model, name, best_quantized_layer
                         )
 
-                        layer_quantization_info[name] = (best_bit_width, min_error)
+                        layer_quantization_info[name] = (
+                            best_bit_width,
+                            min_error.item(),
+                        )
                         # print(
                         #     "Max memory allocation (GB):",
                         #     torch.cuda.max_memory_allocated() / 1e9,
@@ -525,4 +530,7 @@ class Quantizer:
                     else:
                         print(f"Could not quantize layer {name}")
 
-            return layer_quantization_info
+            return (
+                layer_quantization_info,
+                original_model_accuracy,
+            )
