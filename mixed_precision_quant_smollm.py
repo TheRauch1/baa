@@ -78,7 +78,7 @@ del model
 gc.collect()
 torch.cuda.empty_cache()
 model = AutoModelForCausalLM.from_pretrained("/tmp/quantized_model", device_map="auto")
-evaluation_fn(model)
+quantized_model_accuracy = evaluation_fn(model)
 
 # delete the temporary model
 shutil.rmtree("/tmp/quantized_model")
@@ -106,6 +106,7 @@ log = {
     "error_threshold": error_threshold,
     "min_quantile": quantizer.min_quantile,
     "max_quantile": quantizer.max_quantile,
+    "quantized_model_accuracy": quantized_model_accuracy,
 }
 
 # Create logs directory if it doesn't exist
