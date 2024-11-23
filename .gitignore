@@ -165,3 +165,4 @@ sft_output/
 data/
 *.pth
 .DS_Store
+wandb
