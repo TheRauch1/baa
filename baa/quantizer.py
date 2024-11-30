@@ -370,8 +370,20 @@ class Quantizer:
         # scale_max = tensor.quantile(0.95, dim=0)
         # scale_max = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.95)]
 
-        tensor_q = tensor.clone()
-        scale = (qmax - qmin) / (scale_max - scale_min)
+        try:
+            tensor_q = tensor.clone()
+            scale = (qmax - qmin) / (scale_max - scale_min)
+        except (torch.OutOfMemoryError, torch.cuda.OutOfMemoryError):
+            old_device = tensor.device
+            tensor_q = tensor.cpu().clone()
+            gc.collect()
+            torch.cuda.empty_cache()
+            scale = (qmax - qmin) / (scale_max - scale_min)
+            zero_point = (-scale * scale_min).round() - scale_max
+            tensor_q.multiply_(scale.cpu()).add_(zero_point.cpu()).round_()
+            tensor_q.sub_(zero_point.cpu()).div_(scale.cpu())
+            return tensor_q
+            
         zero_point = (-scale * scale_min).round() - scale_max
         # quantize
         tensor_q.multiply_(scale).add_(zero_point).round_()
@@ -385,7 +397,7 @@ class Quantizer:
             layer.out_features,
             bias=(layer.bias is not None),
             # device=layer.weight.device,
-            dtype=torch.float16,
+            dtype=layer.weight.dtype,
         )
         quantized_weight = self.quantize_tensor(layer.weight.data, bit_width)
         quantized_layer.weight.data = quantized_weight
@@ -492,6 +504,7 @@ class Quantizer:
                         quantized_output = quantized_layer(
                             original_input.to(quantized_layer.weight.device)
                         )
+                        gc.collect()
                         torch.cuda.empty_cache()
                         # print(torch.cuda.memory_stats())
 
@@ -502,7 +515,11 @@ class Quantizer:
                         if error >= error_threshold:
                             min_error = error
                             best_bit_width = bit_width
+                            if best_quantized_layer is not None:
+                                best_quantized_layer.to("cpu")
+                                del best_quantized_layer
                             best_quantized_layer = quantized_layer
+                        gc.collect()
                         torch.cuda.empty_cache()
 
                     if best_quantized_layer is not None:
