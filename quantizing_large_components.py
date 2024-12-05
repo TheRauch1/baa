@@ -51,19 +51,19 @@ with torch.no_grad():
     include_list = {
         "Full_Model": [],
         "Self_Attention": [
-            layer.custom_name
-            for layer in model.named_modudes
-            if "self_attn" not in layer.custom_name
+            name
+            for name, module in model.named_modules()
+            if "self_attn" not in getattr(module, "custom_name", "")
         ],
         "MLP": [
-            layer.custom_name
-            for layer in model.named_modules
-            if "mlp" not in layer.custom_name
+            name
+            for name, module in model.named_modules()
+            if "self_attn" not in getattr(module, "custom_name", "")
         ],
         "LM_Head": [
-            layer.custom_name
-            for layer in model.named_modules
-            if "lm_head" not in layer.custom_name
+            name
+            for name, module in model.named_modules()
+            if "self_attn" not in getattr(module, "custom_name", "")
         ],
     }
     exclude_list = include_list[include_component]
@@ -87,7 +87,7 @@ log_name = os.path.join(
     (
         f"{model_name.replace('/', '_')}"
         + f"_quantization_{include_component}"
-        + f"{config.weight_bits}bits"
+        + f"_{config.weight_bits}bits"
         + f"_{date_time}.json"
     ),
 )
