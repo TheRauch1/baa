@@ -32,8 +32,6 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             32: torch.int32,
         }
 
-        # self.qmin = torch.iinfo(self.type_mapping[bits]).min
-        # self.qmax = torch.iinfo(self.type_mapping[bits]).max
         self.weight_qmin = -(2 ** (self.weight_bits - 1))
         self.weight_qmax = 2 ** (self.weight_bits - 1) - 1
         self.activation_qmin = -(2 ** (activation_bits - 1))
@@ -114,64 +112,6 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         return output
 
 
-class QuantizedLinearLayer(nn.Module):
-    def __init__(
-        self, in_features, out_features, bias=True, dtype=torch.float32, bits=8
-    ):
-        super().__init__()
-        self.bits = bits
-
-        self.type_mapping = {
-            8: torch.int8,
-            16: torch.int16,
-            32: torch.int32,
-        }
-
-        self.register_buffer(
-            "weight",
-            torch.randint(
-                -(2 ** (bits - 1)),
-                2 ** (bits - 1),
-                (out_features, in_features),
-            ).to(self.type_mapping[bits]),
-        )
-
-        self.register_buffer(
-            "scale",
-            torch.randn((out_features), dtype=dtype),
-        )
-
-        if bias:
-            self.register_buffer(
-                "bias",
-                torch.randn((1, out_features), dtype=dtype),
-            )
-        else:
-            self.bias = None
-
-    def quantize(self, weight):
-        weight_f32 = weight.clone().to(torch.float32)
-
-        Qmin = torch.iinfo(self.type_mapping[self.bits]).min
-        Qmax = torch.iinfo(self.type_mapping[self.bits]).max
-
-        scale = weight_f32.abs().max(dim=-1).values / ((Qmax - Qmin) // 2)
-        scale = scale.to(weight.dtype)
-
-        quantized_weight = torch.clamp(
-            torch.round(weight / scale.unsqueeze(1)), Qmin, Qmax
-        ).to(self.type_mapping[self.bits])
-
-        self.weight = quantized_weight
-        self.scale = scale
-
-    def forward(self, x):
-        output = F.linear(x, self.weight.to(x.dtype)) * self.scale
-        if self.bias is not None:
-            output += self.bias
-        return output
-
-
 def replace_linear_layer_with_activation(
     base_model,
     quantizer_class,
@@ -227,38 +167,6 @@ def replace_linear_layer_with_activation(
                 activation_bits=activation_bits,
                 exclude_list=exclude_list,
                 quantized=quantized,
-            )
-
-
-def replace_linear_layer(base_model, quantizer_class, exclude_list, quantized=True):
-    for name, child in base_model.named_children():
-        if name in exclude_list:
-            continue
-        if isinstance(child, nn.Linear) and not any([x == name for x in exclude_list]):
-            old_bias = child.bias
-            old_weight = child.weight
-            in_features = child.in_features
-            out_features = child.out_features
-
-            quantizer_layer = quantizer_class(
-                in_features,
-                out_features,
-                old_bias is not None,
-                old_weight.dtype,
-                bits=8,
-            )
-
-            setattr(base_model, name, quantizer_layer)
-
-            if quantized:
-                getattr(base_model, name).quantize(old_weight)
-
-            if old_bias is not None:
-                getattr(base_model, name).bias = old_bias
-
-        else:
-            replace_linear_layer(
-                child, quantizer_class, exclude_list, quantized=quantized
             )
 
 
@@ -383,7 +291,7 @@ class Quantizer:
             tensor_q.multiply_(scale.cpu()).add_(zero_point.cpu()).round_()
             tensor_q.sub_(zero_point.cpu()).div_(scale.cpu())
             return tensor_q
-            
+
         zero_point = (-scale * scale_min).round() - scale_max
         # quantize
         tensor_q.multiply_(scale).add_(zero_point).round_()
