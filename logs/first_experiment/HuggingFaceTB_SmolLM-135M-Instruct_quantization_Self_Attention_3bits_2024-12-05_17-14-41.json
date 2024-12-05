@@ -1,0 +1,7 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "original_model_accuracy": 0.39463618573207615,
+    "include_component": "Self_Attention",
+    "weight_bits": 3,
+    "quantized_model_accuracy": 0.1592243373065291
+}

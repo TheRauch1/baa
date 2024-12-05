@@ -1,0 +1,7 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "original_model_accuracy": 0.4633191733091499,
+    "include_component": "MLP",
+    "weight_bits": 3,
+    "quantized_model_accuracy": 0.3834661829984249
+}

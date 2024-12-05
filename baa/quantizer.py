@@ -68,24 +68,27 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         self.activation_scale = activation_scale
 
     def quantize(self, weight):
-        weight_f32 = weight.detach().clone().to(torch.float32)
+        # weight_f32 = weight.detach().clone().to(torch.float32)
+        weight_f32 = weight
 
         scale = (weight_f32.max(dim=-1).values - weight_f32.min(dim=-1).values) / (
             self.weight_qmax - self.weight_qmin
         )
         zero_point = self.weight_qmin - weight_f32.min(dim=-1).values / scale
 
-        quantized_weight = torch.clamp(
-            torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
-            self.weight_qmin,
-            self.weight_qmax,
-        ).to(torch.int8)
+        
+        # quantized_weight = torch.clamp(
+        #     torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
+        #     self.weight_qmin,
+        #     self.weight_qmax,
+        # ).to(torch.int8)
 
-        assert quantized_weight.shape == weight.shape
+        weight_f32.divide_(scale.unsqueeze(1)).add_(zero_point.unsqueeze(1)).round_().clamp_(self.weight_qmin, self.weight_qmax)
 
-        self.weight = quantized_weight
-        self.scale = scale
-        self.zero_point = zero_point
+        self.weight = weight_f32.to(weight.device)
+        self.scale = scale.to(weight.device)
+        self.zero_point = zero_point.to(weight.device)
+        weight.to("cpu")
         torch.cuda.empty_cache()
 
     def forward(self, x):
@@ -106,7 +109,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             adjusted_weight = torch.sub(
                 self.weight.to(x.dtype), self.zero_point.unsqueeze(1)
             )
-            output = F.linear(x, adjusted_weight) * self.scale
+            output = F.linear(x.to(adjusted_weight.device), adjusted_weight) * self.scale
         if self.bias is not None:
             output += self.bias
         return output
