@@ -26,9 +26,9 @@ bnb_config = BitsAndBytesConfig(
 )
 
 # %%
-model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
+# model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
 # model_name = "meta-llama/Llama-3.2-3B-Instruct"
-# model_name = "meta-llama/Llama-3.1-8B-Instruct"
+model_name = "meta-llama/Llama-3.1-8B-Instruct"
 
 # %%
 model = AutoModelForCausalLM.from_pretrained(
@@ -156,11 +156,18 @@ llama.batch_generate(["Hi there", "How are you", "What is your name"])
 # print(llama.generate("Tell a short story of humanity with happy ending"))
 
 # %%
-# benchmark = MMLU(tasks=[MMLUTask.GLOBAL_FACTS], n_shots=5)
-benchmark = MMLU(n_shots=5)
+benchmark = MMLU(
+    tasks=[
+        MMLUTask.GLOBAL_FACTS,
+        MMLUTask.ABSTRACT_ALGEBRA,
+        MMLUTask.COLLEGE_COMPUTER_SCIENCE,
+    ],
+    n_shots=5,
+)
+# benchmark = MMLU(n_shots=5)
 # benchmark = MMLU(n_shots=2)
 # benchmark = TruthfulQA(tasks=[TruthfulQATask.ADVERTISING], mode=TruthfulQAMode.MC2)
-# benchmark = HellaSwag(tasks=[HellaSwagTask.BATON_TWIRLING], n_shots=3)
+# benchmark = HellaSwag(n_shots=3)
 results = benchmark.evaluate(llama, batch_size=16)
 preds = benchmark.predictions
 print(results)
