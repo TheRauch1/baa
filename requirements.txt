@@ -1,6 +1,7 @@
 transformers
 bitsandbytes
 accelerate
+lm-format-enforcer
 torch
 ipykernel
 ipython

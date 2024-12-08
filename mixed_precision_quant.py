@@ -11,8 +11,7 @@ from dotenv import load_dotenv
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 import wandb
-from baa import LLMAccuracyBenchmark, device_map
-from baa.mnist import MNIST, Net
+from baa import LLMAccuracyBenchmark
 from baa.quantizer import Quantizer
 
 load_dotenv()
