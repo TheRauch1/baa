@@ -166,3 +166,4 @@ data/
 *.pth
 .DS_Store
 wandb
+.deepeval_telemtry.txt
