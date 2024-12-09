@@ -22,13 +22,14 @@ transformers.set_seed(seed)
 
 # %%
 bnb_config = BitsAndBytesConfig(
-    load_in_8bit=True,
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16,
 )
 
 # %%
-# model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
+model_name = "HuggingFaceTB/SmolLM-135M-Instruct"
 # model_name = "meta-llama/Llama-3.2-3B-Instruct"
-model_name = "meta-llama/Llama-3.1-8B-Instruct"
+# model_name = "meta-llama/Llama-3.1-8B-Instruct"
 
 # %%
 model = AutoModelForCausalLM.from_pretrained(
@@ -158,9 +159,9 @@ llama.batch_generate(["Hi there", "How are you", "What is your name"])
 # %%
 benchmark = MMLU(
     tasks=[
-        MMLUTask.GLOBAL_FACTS,
-        MMLUTask.ABSTRACT_ALGEBRA,
-        MMLUTask.COLLEGE_COMPUTER_SCIENCE,
+        MMLUTask.BUSINESS_ETHICS,
+        MMLUTask.MEDICAL_GENETICS,
+        MMLUTask.FORMAL_LOGIC,
     ],
     n_shots=5,
 )
@@ -172,10 +173,6 @@ results = benchmark.evaluate(llama, batch_size=16)
 preds = benchmark.predictions
 print(results)
 
-# %%
-preds.dtypes
-
-# %%
 preds_correct = preds[preds["Correct"] == True]
 preds_incorrect = preds[preds["Correct"] == False]
 
