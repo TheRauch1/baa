@@ -6,9 +6,9 @@ import os
 import shutil
 
 import torch
+import transformers
 from datasets import load_dataset
 from dotenv import load_dotenv
-import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 import wandb
@@ -20,7 +20,7 @@ from baa import (
     add_custom_name_to_linear_layers,
     remove_all_hooks,
     replace_linear_layer_with_activation,
-    seed
+    seed,
 )
 
 transformers.set_seed(seed)
@@ -40,7 +40,12 @@ tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
 
 
 def evaluation_fn(model):
-    dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
+    dataset = load_dataset(
+        "wikitext",
+        "wikitext-2-raw-v1",
+        split="test",
+        revision="b08601e04326c79dfdd32d625aee71d232d685c3",
+    )
     wikitext_benchmark = LLMAccuracyBenchmark(
         model=model,
         tokenizer=tokenizer,
