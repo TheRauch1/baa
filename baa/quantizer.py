@@ -396,7 +396,7 @@ class Quantizer:
             register_hooks()
 
             with torch.no_grad():
-                original_model_accuracy = self.evaluation_fn(model)
+                original_model_benchmarks = self.evaluation_fn(model)
 
             for hook in hooks:
                 hook.remove()

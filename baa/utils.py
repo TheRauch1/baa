@@ -1,5 +1,6 @@
 import textwrap
 
+
 def get_memory_usage(model):
     """Calculates the memory usage of a PyTorch model."""
     total_memory = 0
@@ -30,13 +31,13 @@ def _beautify_text(text):
         print(f"Output {i}:\n{wrapped_sentence}\n")
 
 
-def chat_with_model(model, tokenizer, prompt, max_length=100, beautify=True):
+def chat_with_model(model, tokenizer, prompt, max_new_tokens=100, beautify=True):
     """Chat with a model using a given prompt."""
     # Tokenize the prompt
     input_ids = tokenizer.encode(prompt, return_tensors="pt").to(model.device)
 
     # Generate a response from the model
-    output = model.generate(input_ids, max_length=max_length)
+    output = model.generate(input_ids, max_new_tokens=max_new_tokens)
 
     # Decode the response
     response = tokenizer.batch_decode(output, skip_special_tokens=True)

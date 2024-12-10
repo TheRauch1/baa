@@ -8,17 +8,22 @@ import shutil
 import torch
 from datasets import load_dataset
 from dotenv import load_dotenv
+import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 import wandb
 from baa import (
     LLMAccuracyBenchmark,
+    MMLUBenchmark,
     QuantizedLinearLayerWithActivation,
+    SanityTextBenchmark,
     add_custom_name_to_linear_layers,
     remove_all_hooks,
     replace_linear_layer_with_activation,
+    seed
 )
 
+transformers.set_seed(seed)
 load_dotenv()
 
 # Initialize WandB
@@ -31,23 +36,48 @@ include_component = config.include_component
 model_name = config.model_name
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 original_device = model.device
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
 
 
-dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
-benchmark = LLMAccuracyBenchmark(
-    model=model,
-    tokenizer=tokenizer,
-    dataset=dataset,
-    sequence_length=512,
-    num_samples=300,
-    batch_size=1,
-)
+def evaluation_fn(model):
+    dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
+    wikitext_benchmark = LLMAccuracyBenchmark(
+        model=model,
+        tokenizer=tokenizer,
+        dataset=dataset,
+        sequence_length=512,
+        num_samples=300,
+        batch_size=1,
+    )
+    wikitext_accuracy = wikitext_benchmark.evaluate()
+    del dataset
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    mmlu_benchmark = MMLUBenchmark(
+        model=model, tokenizer=tokenizer, model_name=model_name
+    )
+    mmlu_results = mmlu_benchmark.evaluate()
+    del mmlu_benchmark
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    sanity_check_benchmark = SanityTextBenchmark(model, tokenizer)
+    sanity_check_string = sanity_check_benchmark.evaluate()
+    del sanity_check_benchmark
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    return {
+        "wikitext_accuracy": wikitext_accuracy,
+        "mmlu_results": mmlu_results,
+        "sanity_check_string": sanity_check_string,
+    }
 
 
 with torch.no_grad():
     add_custom_name_to_linear_layers(model)
-    original_model_accuracy = benchmark.evaluate()
+    original_model_benchmarks = evaluation_fn(model)
     include_list = {
         "Full_Model": [],
         "Self_Attention": [
@@ -77,7 +107,7 @@ with torch.no_grad():
     )
     remove_all_hooks(model)
 
-    quantized_model_accuracy = benchmark.evaluate()
+    quantized_model_benchmarks = evaluation_fn(model)
 
 # Write log
 date_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -94,10 +124,10 @@ log_name = os.path.join(
 
 log = {
     "model_name": model_name,
-    "original_model_accuracy": original_model_accuracy,
+    "original_model_benchmarks": original_model_benchmarks,
     "include_component": include_component,
     "weight_bits": config.weight_bits,
-    "quantized_model_accuracy": quantized_model_accuracy,
+    "quantized_model_benchmarks": quantized_model_benchmarks,
 }
 
 # Create logs directory if it doesn't exist

@@ -22,8 +22,7 @@ transformers.set_seed(seed)
 
 # %%
 bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_compute_dtype=torch.float16,
+    load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16, bnb_4bit_quant_type="nf4"
 )
 
 # %%
@@ -169,7 +168,14 @@ benchmark = MMLU(
 # benchmark = MMLU(n_shots=2)
 # benchmark = TruthfulQA(tasks=[TruthfulQATask.ADVERTISING], mode=TruthfulQAMode.MC2)
 # benchmark = HellaSwag(n_shots=3)
-results = benchmark.evaluate(llama, batch_size=16)
+overall_score = benchmark.evaluate(llama, batch_size=16)
+results = {}
+results["overall_score"] = overall_score
+# results["predictions"] = benchmark.predictions.to_json()
+results["task_scores"] = benchmark.task_scores.to_json()
+
+with open("results.json", "w", encoding="utf-8") as f:
+    json.dump(results, f, indent=4)
 preds = benchmark.predictions
 print(results)
 

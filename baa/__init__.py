@@ -1,6 +1,5 @@
-from .AccuracyBenchmark import AccuracyBenchmark, LLMAccuracyBenchmark
-
-# from .constants import device_map
+from .benchmarks import LLMAccuracyBenchmark, MMLUBenchmark, SanityTextBenchmark
+from .constants import seed
 from .PerplexityBenchmark import PerplexityBenchmark
 from .quantizer import (
     QuantizedLinearLayerWithActivation,
@@ -18,8 +17,8 @@ __all__ = [
     "PerplexityBenchmark",
     "get_memory_usage",
     "print_memory_usage",
-    # "device_map",
-    "AccuracyBenchmark",
+    "seed",
+    "benchmarks",
     "LLMAccuracyBenchmark",
     "QuantizedLinearLayer",
     "QuantizedLinearLayerWithActivation",
@@ -32,4 +31,6 @@ __all__ = [
     "replace_linear_layer",
     "replace_linear_layer_with_activation",
     "chat_with_model",
+    "MMLUBenchmark",
+    "SanityTextBenchmark",
 ]
