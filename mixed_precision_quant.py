@@ -92,6 +92,7 @@ def data_collection_function(model):
     gc.collect()
     torch.cuda.empty_cache()
 
+original_model_benchmarks = evaluation_fn(model)
 
 # Initialize quantizer with WandB parameters
 quantizer = Quantizer(
