@@ -72,9 +72,30 @@ def evaluation_fn(model):
     }
 
 
+def data_collection_function(model):
+    dataset = load_dataset(
+        "wikitext",
+        "wikitext-2-raw-v1",
+        split="test",
+        revision="b08601e04326c79dfdd32d625aee71d232d685c3",
+    )
+    wikitext_benchmark = LLMAccuracyBenchmark(
+        model=model,
+        tokenizer=tokenizer,
+        dataset=dataset,
+        sequence_length=512,
+        num_samples=300,
+        batch_size=1,
+    )
+    wikitext_benchmark.evaluate()
+    del dataset
+    gc.collect()
+    torch.cuda.empty_cache()
+
+
 # Initialize quantizer with WandB parameters
 quantizer = Quantizer(
-    evaluation_fn=evaluation_fn,
+    evaluation_fn=data_collection_function,
     min_quantile=min_quantile,
     max_quantile=max_quantile,
 )
@@ -82,8 +103,8 @@ quantizer = Quantizer(
 quantization_levels = [16, 12, 10, 8, 6, 5, 4, 3, 2]
 error_threshold = config.error_threshold
 
-layer_quantization_info, original_model_benchmarks = (
-    quantizer.quantize_layer_independently(model, error_threshold, quantization_levels)
+layer_quantization_info = quantizer.quantize_layer_independently(
+    model, error_threshold, quantization_levels
 )
 
 # if dir already exists, delete it

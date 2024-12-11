@@ -76,14 +76,15 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         )
         zero_point = self.weight_qmin - weight_f32.min(dim=-1).values / scale
 
-        
         # quantized_weight = torch.clamp(
         #     torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
         #     self.weight_qmin,
         #     self.weight_qmax,
         # ).to(torch.int8)
 
-        weight_f32.divide_(scale.unsqueeze(1)).add_(zero_point.unsqueeze(1)).round_().clamp_(self.weight_qmin, self.weight_qmax)
+        weight_f32.divide_(scale.unsqueeze(1)).add_(
+            zero_point.unsqueeze(1)
+        ).round_().clamp_(self.weight_qmin, self.weight_qmax)
 
         self.weight = weight_f32.to(weight.device)
         self.scale = scale.to(weight.device)
@@ -109,7 +110,9 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             adjusted_weight = torch.sub(
                 self.weight.to(x.dtype), self.zero_point.unsqueeze(1)
             )
-            output = F.linear(x.to(adjusted_weight.device), adjusted_weight) * self.scale
+            output = (
+                F.linear(x.to(adjusted_weight.device), adjusted_weight) * self.scale
+            )
         if self.bias is not None:
             output += self.bias
         return output
@@ -396,7 +399,7 @@ class Quantizer:
             register_hooks()
 
             with torch.no_grad():
-                original_model_benchmarks = self.evaluation_fn(model)
+                self.evaluation_fn(model)
 
             for hook in hooks:
                 hook.remove()
@@ -458,7 +461,4 @@ class Quantizer:
                     else:
                         print(f"Could not quantize layer {name}")
 
-            return (
-                layer_quantization_info,
-                original_model_accuracy,
-            )
+            return layer_quantization_info
