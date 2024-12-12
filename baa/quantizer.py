@@ -100,7 +100,11 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         self.zero_point = ((-self.scale * scale_min).round() - scale_max).to(
             weight.device
         )
-        self.weight = weight.multiply_(self.scale).add_(self.zero_point).round_()
+        # self.weight = weight.multiply_(self.scale).add_(self.zero_point).round_()
+        self.weight = weight.multiply(self.scale).add(self.zero_point).round().to(weight.device)
+        weight.to("cpu")
+        del weight
+        gc.collect()
         torch.cuda.empty_cache()
 
     @torch.jit.export
