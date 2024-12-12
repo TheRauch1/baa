@@ -1,0 +1,21 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.5299508376688463,
+        "mmlu_results": {
+            "overall_score": 0.598159509202454,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.68,\"1\":0.71,\"2\":0.4444444444}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally come together to face the challenges of climate change, inequality, and technological advancements. The once-blue skies were now a deep shade of indigo, a result of the collective efforts to reverse the damage done to the environment.\n\nThe city of New Eden, a marvel of sustainable architecture, stood as a beacon of hope for the future. Towering skyscrapers made of recycled materials and powered by renewable energy stretched towards the sky,"
+    },
+    "include_component": "LM_Head",
+    "weight_bits": 2,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 4.773041859577109e-05,
+        "mmlu_results": {
+            "overall_score": 0.20245398773006135,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.27,\"1\":0.19,\"2\":0.1587301587}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingz\u0119z\u0119z\u0119z\u0119 authTokenz\u0119z\u0119z\u0119z\u0119z\u0119BILEz\u0119 Jegz\u0119z\u0119z\u0119 Cheatz\u0119z\u0119z\u0119z\u0119 authTokenz\u0119z\u0119z\u0119ounds arayz\u0119oundsz\u0119z\u0119 holz\u0119BILEz\u0119 authTokenz\u0119z\u0119z\u0119 Krajz\u0119z\u0119 holz\u0119z\u0119z\u0119z\u0119z\u0119z\u0119z\u0119z\u0119z\u0119z\u0119z\u0119z\u0119 holz\u0119z\u0119z\u0119 authToken Cheat Krajz\u0119 Cheatz\u0119 Resortz\u0119z\u0119z\u0119z\u0119z\u0119 holz\u0119z\u0119z\u0119 Cheatz\u0119z\u0119 Cheatz\u0119z\u0119oundsz\u0119z\u0119z\u0119inusz\u0119z\u0119z\u0119z\u0119inusz\u0119z\u0119z\u0119z\u0119z\u0119z\u0119enthz\u0119 Cheat"
+    }
+}

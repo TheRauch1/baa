@@ -1,0 +1,21 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.4633191733091499,
+        "mmlu_results": {
+            "overall_score": 0.4539877300613497,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.53,\"1\":0.49,\"2\":0.3650793651}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 11 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world where technology had advanced to the point of near-singularity, humanity had reached a crossroads. Climate change, wars, and social inequality had pushed the world to the brink of collapse. But in the midst of this chaos, a glimmer of hope emerged.\n\nA young scientist, named Maya, had dedicated her life to finding a solution to the world's problems. She had spent years studying the effects of climate change, and had developed"
+    },
+    "include_component": "LM_Head",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.3834661829984249,
+        "mmlu_results": {
+            "overall_score": 0.2883435582822086,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.29,\"1\":0.28,\"2\":0.2936507937}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 11 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world ravaged by war, environmental disasters, and social inequality, a young woman named Ava found herself standing amidst the ruins of a once-thriving city. The streets were empty, the buildings stood as skeletal reminders of what once was, and the air was thick with the acrid smell of smoke and ash.\n\nAva, with a fierce determination in her eyes, began to rebuild. She started by clearing the rubble, sorting through the debris,"
+    }
+}

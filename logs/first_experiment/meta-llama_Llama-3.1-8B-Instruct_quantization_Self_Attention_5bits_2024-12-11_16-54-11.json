@@ -1,0 +1,21 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.5299508376688463,
+        "mmlu_results": {
+            "overall_score": 0.598159509202454,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.68,\"1\":0.71,\"2\":0.4444444444}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally come together to face the challenges of climate change, inequality, and technological advancements. The once-blue skies were now a deep shade of indigo, a result of the collective efforts to reverse the damage done to the environment.\n\nThe city of New Eden, a marvel of sustainable architecture, stood as a beacon of hope for the future. Towering skyscrapers made of recycled materials and powered by renewable energy stretched towards the sky,"
+    },
+    "include_component": "Self_Attention",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.5299508376688463,
+        "mmlu_results": {
+            "overall_score": 0.6165644171779141,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.7,\"1\":0.75,\"2\":0.4444444444}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally reached a point of perfect harmony and balance. It was a future where technology and nature coexisted in perfect sync, and humanity had long since overcome the challenges of climate change, poverty, and disease.\n\nThe story begins in a small village nestled in the heart of a lush forest, where a young girl named Ava grew up surrounded by the wonders of the natural world. Ava's village was a thriving community of people from all"
+    }
+}
