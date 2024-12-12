@@ -18,6 +18,7 @@ from baa import (
     QuantizedLinearLayerWithActivation,
     SanityTextBenchmark,
     add_custom_name_to_linear_layers,
+    print_memory_usage,
     remove_all_hooks,
     replace_linear_layer_with_activation,
     seed,
@@ -26,8 +27,15 @@ from baa import (
 transformers.set_seed(seed)
 load_dotenv()
 
+# conf = {
+#     "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+#     "weight_bits": 5,
+#     "include_component": "Full_Model",
+# }
+
 # Initialize WandB
 wandb.init()
+# wandb.init(project="baa", config=conf)
 # Retrieve configuration
 config = wandb.config
 include_component = config.include_component
@@ -37,12 +45,13 @@ model_name = config.model_name
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 original_device = model.device
 tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
+# print_memory_usage(model)
 
 
 def evaluation_fn(model):
     dataset = load_dataset(
         "wikitext",
-        "wikitext-2-raw-v1",
+        "wikitext-2-v1",
         split="test",
         revision="b08601e04326c79dfdd32d625aee71d232d685c3",
     )
@@ -82,7 +91,7 @@ def evaluation_fn(model):
 
 with torch.no_grad():
     add_custom_name_to_linear_layers(model)
-    original_model_benchmarks = evaluation_fn(model)
+    # original_model_benchmarks = only_wikitext_accuracy(model)
     include_list = {
         "Full_Model": [],
         "Self_Attention": [
@@ -93,12 +102,12 @@ with torch.no_grad():
         "MLP": [
             name
             for name, module in model.named_modules()
-            if "self_attn" not in getattr(module, "custom_name", "")
+            if "mlp" not in getattr(module, "custom_name", "")
         ],
         "LM_Head": [
             name
             for name, module in model.named_modules()
-            if "self_attn" not in getattr(module, "custom_name", "")
+            if "lm_head" not in getattr(module, "custom_name", "")
         ],
     }
     exclude_list = include_list[include_component]
@@ -129,7 +138,7 @@ log_name = os.path.join(
 
 log = {
     "model_name": model_name,
-    "original_model_benchmarks": original_model_benchmarks,
+    # "original_model_benchmarks": original_model_benchmarks,
     "include_component": include_component,
     "weight_bits": config.weight_bits,
     "quantized_model_benchmarks": quantized_model_benchmarks,

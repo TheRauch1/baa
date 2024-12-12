@@ -91,35 +91,47 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         # self.zero_point = zero_point.to(weight.device)
         # weight.to("cpu")
 
-        scale_min = weight.min(dim=0)
-        scale_max = weight.max(dim=0)
+        scale_min = weight.min(dim=0).values
+        scale_max = weight.max(dim=0).values
 
-        scale = (self.weight_qmax - self.weight_qmin) / (scale_max - scale_min)
-        self.zero_point = (-scale * scale_min).round() - scale_max
-        self.weight = weight.multiply(scale).add(self.zero_point).round().to(torch.int8)
+        self.scale = (
+            (self.weight_qmax - self.weight_qmin) / (scale_max - scale_min)
+        ).to(weight.device)
+        self.zero_point = ((-self.scale * scale_min).round() - scale_max).to(
+            weight.device
+        )
+        self.weight = weight.multiply(self.scale).add(self.zero_point).round()
         weight.to("cpu")
+        del weight
         gc.collect()
         torch.cuda.empty_cache()
 
+    @torch.jit.export
     def forward(self, x):
-        if self.activation_scale is not None:
-            x_int = (
-                torch.round(torch.div(x, self.activation_scale))
-                .clamp(
-                    self.activation_qmin,
-                    self.activation_qmax,
-                )
-                .to
-            )
-            assert x.shape == x_int.shape
-            output_int = F.linear(x_int, self.weight.to(x.dtype))
-            output = output_int * (self.activation_scale * self.scale)
+        # if self.activation_scale is not None:
+        #     x_int = (
+        #         torch.round(torch.div(x, self.activation_scale))
+        #         .clamp(
+        #             self.activation_qmin,
+        #             self.activation_qmax,
+        #         )
+        #         .to
+        #     )
+        #     assert x.shape == x_int.shape
+        #     output_int = F.linear(x_int, self.weight.to(x.dtype))
+        #     output = output_int * (self.activation_scale * self.scale)
 
-        else:
-            adjusted_weight = torch.sub(
-                self.weight.to(x.dtype), self.zero_point.unsqueeze(1)
-            )
-            output = F.linear(x, adjusted_weight.to(x.dtype)) * self.scale
+        # else:
+        # adjusted_weight = torch.sub(self.weight.to(x.dtype), self.zero_point)
+
+        # print(f"x device {x.device}")
+        # print(f"adjusted_weight device {adjusted_weight.device}")
+        # print(f"scale device {self.scale.device}")
+        output = F.linear(
+            # x, self.weight.to(x.dtype).sub(self.zero_point).div(self.scale)
+            x,
+            self.weight.sub(self.zero_point).div(self.scale),
+        )
         if self.bias is not None:
             output += self.bias
         return output
