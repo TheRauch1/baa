@@ -275,7 +275,7 @@ class MMLUBenchmark:
             ],
             n_shots=5,
         )
-        overall_score = benchmark.evaluate(self.model, batch_size=16)
+        overall_score = benchmark.evaluate(self.model, batch_size=8)
         results = {
             "overall_score": overall_score,
             "task_scores": benchmark.task_scores.to_json(),

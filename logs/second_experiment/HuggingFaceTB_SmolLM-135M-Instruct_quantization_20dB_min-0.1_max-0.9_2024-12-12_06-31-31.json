@@ -1,0 +1,869 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.39463618573207615,
+        "mmlu_results": {
+            "overall_score": 0.294478527607362,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.27,\"1\":0.31,\"2\":0.3015873016}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is the sound of footsteps, heavy and deliberate, echoing through the empty corridors of the old university. The students, still standing, groggily taking their seats, their eyes scanning the dusty shelves, their faces etched with boredom. The silence is deafening, punctuated only by the distant roar of the city outside.\n\nBut then, in a quiet moment, something clicks in my mind. It's a phrase, etched in a small,"
+    },
+    "layerwise_quantization_info": {
+        "model.layers.0.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.666540145874023
+        },
+        "model.layers.0.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.668880462646484
+        },
+        "model.layers.0.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 25.195606231689453
+        },
+        "model.layers.0.self_attn.o_proj": {
+            "bit_width": 2,
+            "error": 23.1667537689209
+        },
+        "model.layers.0.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 22.547348022460938
+        },
+        "model.layers.0.mlp.up_proj": {
+            "bit_width": 4,
+            "error": 25.726947784423828
+        },
+        "model.layers.0.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 26.873750686645508
+        },
+        "model.layers.1.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.950794219970703
+        },
+        "model.layers.1.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 22.314346313476562
+        },
+        "model.layers.1.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 22.017290115356445
+        },
+        "model.layers.1.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 26.64341926574707
+        },
+        "model.layers.1.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.452739715576172
+        },
+        "model.layers.1.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.202232360839844
+        },
+        "model.layers.1.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 23.41656494140625
+        },
+        "model.layers.2.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.694351196289062
+        },
+        "model.layers.2.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.476903915405273
+        },
+        "model.layers.2.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.44598388671875
+        },
+        "model.layers.2.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 20.140274047851562
+        },
+        "model.layers.2.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.314796447753906
+        },
+        "model.layers.2.mlp.up_proj": {
+            "bit_width": 4,
+            "error": 26.518878936767578
+        },
+        "model.layers.2.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 23.07977867126465
+        },
+        "model.layers.3.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.169044494628906
+        },
+        "model.layers.3.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.02454948425293
+        },
+        "model.layers.3.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.09933853149414
+        },
+        "model.layers.3.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 20.12723731994629
+        },
+        "model.layers.3.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 20.7767391204834
+        },
+        "model.layers.3.mlp.up_proj": {
+            "bit_width": 4,
+            "error": 26.31405258178711
+        },
+        "model.layers.3.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.979564666748047
+        },
+        "model.layers.4.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.89838409423828
+        },
+        "model.layers.4.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.660104751586914
+        },
+        "model.layers.4.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.616046905517578
+        },
+        "model.layers.4.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 26.195205688476562
+        },
+        "model.layers.4.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.356908798217773
+        },
+        "model.layers.4.mlp.up_proj": {
+            "bit_width": 4,
+            "error": 26.271095275878906
+        },
+        "model.layers.4.mlp.down_proj": {
+            "bit_width": 4,
+            "error": 26.628847122192383
+        },
+        "model.layers.5.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.496870040893555
+        },
+        "model.layers.5.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 22.67534065246582
+        },
+        "model.layers.5.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.621511459350586
+        },
+        "model.layers.5.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 26.4384822845459
+        },
+        "model.layers.5.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.20497703552246
+        },
+        "model.layers.5.mlp.up_proj": {
+            "bit_width": 4,
+            "error": 26.47037124633789
+        },
+        "model.layers.5.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.106616973876953
+        },
+        "model.layers.6.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.16872215270996
+        },
+        "model.layers.6.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 22.906282424926758
+        },
+        "model.layers.6.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.411346435546875
+        },
+        "model.layers.6.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 26.577165603637695
+        },
+        "model.layers.6.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.130878448486328
+        },
+        "model.layers.6.mlp.up_proj": {
+            "bit_width": 4,
+            "error": 26.46356964111328
+        },
+        "model.layers.6.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.190818786621094
+        },
+        "model.layers.7.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.027698516845703
+        },
+        "model.layers.7.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.31479263305664
+        },
+        "model.layers.7.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.024030685424805
+        },
+        "model.layers.7.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 20.200464248657227
+        },
+        "model.layers.7.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.699743270874023
+        },
+        "model.layers.7.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.165517807006836
+        },
+        "model.layers.7.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 21.225589752197266
+        },
+        "model.layers.8.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.586833953857422
+        },
+        "model.layers.8.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.01811981201172
+        },
+        "model.layers.8.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.760990142822266
+        },
+        "model.layers.8.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 20.088966369628906
+        },
+        "model.layers.8.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.663923263549805
+        },
+        "model.layers.8.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.10665512084961
+        },
+        "model.layers.8.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.601665496826172
+        },
+        "model.layers.9.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.619327545166016
+        },
+        "model.layers.9.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 22.38341522216797
+        },
+        "model.layers.9.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 21.78565788269043
+        },
+        "model.layers.9.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 25.149951934814453
+        },
+        "model.layers.9.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.335344314575195
+        },
+        "model.layers.9.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.096920013427734
+        },
+        "model.layers.9.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.337926864624023
+        },
+        "model.layers.10.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.04450225830078
+        },
+        "model.layers.10.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 22.021730422973633
+        },
+        "model.layers.10.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 26.1658935546875
+        },
+        "model.layers.10.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 20.338947296142578
+        },
+        "model.layers.10.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 22.31168556213379
+        },
+        "model.layers.10.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.124114990234375
+        },
+        "model.layers.10.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.100006103515625
+        },
+        "model.layers.11.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.412824630737305
+        },
+        "model.layers.11.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 22.228046417236328
+        },
+        "model.layers.11.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.333974838256836
+        },
+        "model.layers.11.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 20.021663665771484
+        },
+        "model.layers.11.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 22.001359939575195
+        },
+        "model.layers.11.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.32601547241211
+        },
+        "model.layers.11.mlp.down_proj": {
+            "bit_width": 2,
+            "error": 39.01986312866211
+        },
+        "model.layers.12.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.63382339477539
+        },
+        "model.layers.12.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.25497055053711
+        },
+        "model.layers.12.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.681243896484375
+        },
+        "model.layers.12.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 25.635513305664062
+        },
+        "model.layers.12.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.991775512695312
+        },
+        "model.layers.12.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 21.548078536987305
+        },
+        "model.layers.12.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 23.82624053955078
+        },
+        "model.layers.13.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 25.607290267944336
+        },
+        "model.layers.13.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.035938262939453
+        },
+        "model.layers.13.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 21.961318969726562
+        },
+        "model.layers.13.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 21.73721694946289
+        },
+        "model.layers.13.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 22.089553833007812
+        },
+        "model.layers.13.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.593835830688477
+        },
+        "model.layers.13.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.34613037109375
+        },
+        "model.layers.14.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.92788314819336
+        },
+        "model.layers.14.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 25.762479782104492
+        },
+        "model.layers.14.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 22.544700622558594
+        },
+        "model.layers.14.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 21.255367279052734
+        },
+        "model.layers.14.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.581838607788086
+        },
+        "model.layers.14.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.571029663085938
+        },
+        "model.layers.14.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.06831169128418
+        },
+        "model.layers.15.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 23.909774780273438
+        },
+        "model.layers.15.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 25.14774513244629
+        },
+        "model.layers.15.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.570552825927734
+        },
+        "model.layers.15.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 25.40778923034668
+        },
+        "model.layers.15.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.364253997802734
+        },
+        "model.layers.15.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.468448638916016
+        },
+        "model.layers.15.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.010177612304688
+        },
+        "model.layers.16.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.396617889404297
+        },
+        "model.layers.16.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 25.389936447143555
+        },
+        "model.layers.16.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 26.625904083251953
+        },
+        "model.layers.16.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 21.126209259033203
+        },
+        "model.layers.16.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.666942596435547
+        },
+        "model.layers.16.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.525981903076172
+        },
+        "model.layers.16.mlp.down_proj": {
+            "bit_width": 4,
+            "error": 26.57625389099121
+        },
+        "model.layers.17.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.689266204833984
+        },
+        "model.layers.17.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.794815063476562
+        },
+        "model.layers.17.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.6508731842041
+        },
+        "model.layers.17.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 26.173538208007812
+        },
+        "model.layers.17.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.56714630126953
+        },
+        "model.layers.17.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.507080078125
+        },
+        "model.layers.17.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.032115936279297
+        },
+        "model.layers.18.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.824676513671875
+        },
+        "model.layers.18.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 25.42588233947754
+        },
+        "model.layers.18.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.23382568359375
+        },
+        "model.layers.18.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 21.141895294189453
+        },
+        "model.layers.18.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 22.099225997924805
+        },
+        "model.layers.18.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.541276931762695
+        },
+        "model.layers.18.mlp.down_proj": {
+            "bit_width": 4,
+            "error": 26.61992645263672
+        },
+        "model.layers.19.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.833669662475586
+        },
+        "model.layers.19.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.56542205810547
+        },
+        "model.layers.19.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.109966278076172
+        },
+        "model.layers.19.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 21.43014907836914
+        },
+        "model.layers.19.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 22.035654067993164
+        },
+        "model.layers.19.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.609516143798828
+        },
+        "model.layers.19.mlp.down_proj": {
+            "bit_width": 4,
+            "error": 26.37912940979004
+        },
+        "model.layers.20.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 25.0478458404541
+        },
+        "model.layers.20.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 25.70387077331543
+        },
+        "model.layers.20.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.539691925048828
+        },
+        "model.layers.20.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 20.385013580322266
+        },
+        "model.layers.20.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.979454040527344
+        },
+        "model.layers.20.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.660228729248047
+        },
+        "model.layers.20.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.00055503845215
+        },
+        "model.layers.21.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.094463348388672
+        },
+        "model.layers.21.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 25.053054809570312
+        },
+        "model.layers.21.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 26.13503646850586
+        },
+        "model.layers.21.self_attn.o_proj": {
+            "bit_width": 4,
+            "error": 26.364925384521484
+        },
+        "model.layers.21.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 22.05131721496582
+        },
+        "model.layers.21.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.935951232910156
+        },
+        "model.layers.21.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.318042755126953
+        },
+        "model.layers.22.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.390613555908203
+        },
+        "model.layers.22.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.036407470703125
+        },
+        "model.layers.22.self_attn.v_proj": {
+            "bit_width": 3,
+            "error": 20.419662475585938
+        },
+        "model.layers.22.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 24.23605728149414
+        },
+        "model.layers.22.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.39533042907715
+        },
+        "model.layers.22.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.461898803710938
+        },
+        "model.layers.22.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.247726440429688
+        },
+        "model.layers.23.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.144723892211914
+        },
+        "model.layers.23.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.9045352935791
+        },
+        "model.layers.23.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 26.29863739013672
+        },
+        "model.layers.23.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 24.6834774017334
+        },
+        "model.layers.23.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.34197235107422
+        },
+        "model.layers.23.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.29116439819336
+        },
+        "model.layers.23.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.105703353881836
+        },
+        "model.layers.24.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.41938591003418
+        },
+        "model.layers.24.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.565000534057617
+        },
+        "model.layers.24.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 26.238243103027344
+        },
+        "model.layers.24.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 23.099380493164062
+        },
+        "model.layers.24.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 21.015710830688477
+        },
+        "model.layers.24.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.477813720703125
+        },
+        "model.layers.24.mlp.down_proj": {
+            "bit_width": 4,
+            "error": 26.554553985595703
+        },
+        "model.layers.25.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 23.518089294433594
+        },
+        "model.layers.25.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.7382755279541
+        },
+        "model.layers.25.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 25.627193450927734
+        },
+        "model.layers.25.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 24.925813674926758
+        },
+        "model.layers.25.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 20.879013061523438
+        },
+        "model.layers.25.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.322864532470703
+        },
+        "model.layers.25.mlp.down_proj": {
+            "bit_width": 4,
+            "error": 26.524559020996094
+        },
+        "model.layers.26.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 23.61815643310547
+        },
+        "model.layers.26.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.754104614257812
+        },
+        "model.layers.26.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 25.442394256591797
+        },
+        "model.layers.26.self_attn.o_proj": {
+            "bit_width": 2,
+            "error": 20.351144790649414
+        },
+        "model.layers.26.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 20.846973419189453
+        },
+        "model.layers.26.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.36536979675293
+        },
+        "model.layers.26.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 20.622575759887695
+        },
+        "model.layers.27.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.129304885864258
+        },
+        "model.layers.27.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 24.516212463378906
+        },
+        "model.layers.27.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 26.170034408569336
+        },
+        "model.layers.27.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 23.6676025390625
+        },
+        "model.layers.27.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 20.798824310302734
+        },
+        "model.layers.27.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 20.35915756225586
+        },
+        "model.layers.27.mlp.down_proj": {
+            "bit_width": 4,
+            "error": 26.497974395751953
+        },
+        "model.layers.28.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 24.089574813842773
+        },
+        "model.layers.28.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 23.892391204833984
+        },
+        "model.layers.28.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 26.10980987548828
+        },
+        "model.layers.28.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 22.053855895996094
+        },
+        "model.layers.28.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 23.201908111572266
+        },
+        "model.layers.28.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 21.27511978149414
+        },
+        "model.layers.28.mlp.down_proj": {
+            "bit_width": 2,
+            "error": 26.955717086791992
+        },
+        "model.layers.29.self_attn.q_proj": {
+            "bit_width": 3,
+            "error": 22.804580688476562
+        },
+        "model.layers.29.self_attn.k_proj": {
+            "bit_width": 3,
+            "error": 22.914371490478516
+        },
+        "model.layers.29.self_attn.v_proj": {
+            "bit_width": 4,
+            "error": 25.415382385253906
+        },
+        "model.layers.29.self_attn.o_proj": {
+            "bit_width": 3,
+            "error": 22.15961265563965
+        },
+        "model.layers.29.mlp.gate_proj": {
+            "bit_width": 3,
+            "error": 25.323894500732422
+        },
+        "model.layers.29.mlp.up_proj": {
+            "bit_width": 3,
+            "error": 22.523527145385742
+        },
+        "model.layers.29.mlp.down_proj": {
+            "bit_width": 3,
+            "error": 25.093843460083008
+        },
+        "lm_head": {
+            "bit_width": 3,
+            "error": 23.636402130126953
+        }
+    },
+    "average_bit_width": 3.1279620853080567,
+    "error_threshold": 20,
+    "min_quantile": 0.1,
+    "max_quantile": 0.9,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.3828055506137698,
+        "mmlu_results": {
+            "overall_score": 0.294478527607362,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.3,\"1\":0.3,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nHere's a short story:\n\n**The Island of Souls**\n\nIn the bustling city of New Haven, a peculiar institution called \"Soulwood\" had long been neglected. The once-pristine beaches and forests were now mere triggling memories, ravaged by the relentless urban sprawl and the relentless pursuit of profit.\n\nThe people of Soo were euphemized as \"Brothers and Sisters,\" their lives a labyrinthine maze of pollution"
+    }
+}
