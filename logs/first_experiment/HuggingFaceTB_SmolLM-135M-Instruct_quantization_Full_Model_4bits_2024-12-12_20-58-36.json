@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 4,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.03718199608610567,
+        "mmlu_results": {
+            "overall_score": 0.1901840490797546,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.23,\"1\":0.2,\"2\":0.1507936508}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\n 0\n  In  \n.  P    P Study \n  \n\n \n P\n (1   . T  \n\n\n\n  \n ( Security9\n  \n\n P      P\n\n     P A P  P\n P ( T group Al T  \n     \n  used  T  Al  (\n    Pro A \n"
+    }
+}

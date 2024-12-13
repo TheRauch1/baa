@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.42109154163948687,
+        "mmlu_results": {
+            "overall_score": 0.29754601226993865,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.3,\"1\":0.31,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remembered was being lost in the woods, the only sound being the crickets chirping outside my window. But then, I heard the sound of footsteps behind me. It was as if someone had entered the forest, and I couldn't hear them.\n\nAt first, I thought it was just the wind, but then I saw her. A beautiful woman with piercing green eyes and long, curly brown hair, standing in the doorway of my window. She was"
+    }
+}

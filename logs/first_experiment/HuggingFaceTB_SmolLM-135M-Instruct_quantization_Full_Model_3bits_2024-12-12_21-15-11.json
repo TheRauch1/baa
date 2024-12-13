@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.021178517068928027,
+        "mmlu_results": {
+            "overall_score": 0.25153374233128833,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.19,\"1\":0.26,\"2\":0.2936507937}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\n Belt Belt Umb .. functioning  sediment  we   7  data...data Belt  sediment  information Sw  this7......-   7... data sat  we Mei data \u2026 we... nucle   \u2013 sat data it \" functioning Qin   \"59  functioning Qin   \" nucle Mask Qin  data..., \" ~    ...,  data Tong   \"7 spe ..  data Tong data data ..  "
+    }
+}

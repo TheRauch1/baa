@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 6,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4173081104587954,
+        "mmlu_results": {
+            "overall_score": 0.294478527607362,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.3,\"1\":0.3,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is being surrounded by a sea of people. They're all still standing, staring at me with an expression that was almost like a mix of sadness and excitement. They're all trying to smile, to laugh, to cry, and to just smile, like a never-ending happy melody playing in their ears.\n\nBut then, something clicks. They stop and stare at me, and suddenly, I look up at them with an overwhelming sense of hope"
+    }
+}

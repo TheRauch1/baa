@@ -1,0 +1,7 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "original_model_accuracy": 0.39463618573207615,
+    "include_component": "Full_Model",
+    "weight_bits": 8,
+    "quantized_model_accuracy": 0.016278242305639568
+}

@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.3225048923679061,
+        "mmlu_results": {
+            "overall_score": 0.294478527607362,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.3,\"1\":0.3,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe sun rose over the bustling streets of Paris, casting a warm glow over the vibrant cultural scene. People from all over the city woke up to the sound of soft jazz music playing in the distance. Music in Paris became a staple of social life, filling the streets with joy and laughter. Music players from across Europe would gather at City Park La Roquine to share their favorite tunes and sing along with their beloved hosts.\n\nAmong these music enthusiasts was a young artist named"
+    }
+}

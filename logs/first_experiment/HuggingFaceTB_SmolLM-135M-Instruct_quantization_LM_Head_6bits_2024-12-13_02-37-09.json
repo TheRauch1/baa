@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 6,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4213089802130898,
+        "mmlu_results": {
+            "overall_score": 0.27607361963190186,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.24,\"1\":0.3,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is being lost in a dense forest, alone and helpless. The only sound is the creaking of leaves beneath my feet, and the distant hooting of an owl. I'm still holding onto my life, trapped in this world of darkness and despair.\n\nI've heard stories from around the world, of humans with extraordinary abilities, who could wield incredible powers like breathing fire, flying, or manipulating shadows. They've been shown to have a mind"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.007566862361382909,
+        "mmlu_results": {
+            "overall_score": 0.2361963190184049,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.26,\"1\":0.26,\"2\":0.1984126984}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\n\n\n\n Number In   Offer Number and to Together  Number, to to\n\n\n\n\n\n\n\n\n\n\n\n\n\n. to to Dating Later\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  Share Developed Developed Share1\n\n\n   Rel- While Later Number. and and and and and and and & Number But One Other Number and and and and, to, to,- While1   Share Number   Number"
+    }
+}

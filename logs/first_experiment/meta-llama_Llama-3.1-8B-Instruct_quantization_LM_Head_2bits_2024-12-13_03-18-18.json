@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 2,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.16713260646724443,
+        "mmlu_results": {
+            "overall_score": 0.4662576687116564,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.59,\"1\":0.48,\"2\":0.3571428571}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingectl.  - A  (1 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    }
+}

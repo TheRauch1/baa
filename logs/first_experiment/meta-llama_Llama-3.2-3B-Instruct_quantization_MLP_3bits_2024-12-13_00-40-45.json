@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "MLP",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.015003261578604044,
+        "mmlu_results": {
+            "overall_score": 0.22392638036809817,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.22,\"1\":0.25,\"2\":0.2063492063}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 13 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingaddon CHIPLASaddon \u00c2structionagnaagnaagna\u0627\u062a\u06cc\u0442\u0438\u043d CHIPagna \u00c2STRUCTIONivatractioninion \u00c2avaletonacesstruction ontoLOBacestragtractionaryltragagnaaddonagingACHEtragACHEthritis incompetstructionAGEDSTRUCTIONavalACHEacesstruction \u00c2agnaaddon\ufffditlerMED\u00e1ticasitlerarylannerarylLASitlerthonaddonACHEanneraggeritlerSTRUCTIONSSTRUCTIONaddon\u00e2ceutomagnaaryllica MEDeton\u0433\u043e\u0434licastructionstructionivaacesagnaAGE whomaddon\u043baggstructionaxeditleraggerosal\u043bstruction \u00c2itlerloggLASitleritlerlich"
+    }
+}

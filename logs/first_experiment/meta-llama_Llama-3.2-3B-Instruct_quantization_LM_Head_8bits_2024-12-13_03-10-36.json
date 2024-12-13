@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.47469946882862735,
+        "mmlu_results": {
+            "overall_score": 0.44785276073619634,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.48,\"1\":0.53,\"2\":0.3571428571}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 13 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world ravaged by war, poverty, and inequality, there lived a young girl named Aria. She grew up in a small village on the outskirts of a sprawling city, where the air was thick with smoke and the streets were lined with makeshift shelters. Aria's village was one of the few remaining pockets of hope in a world that seemed to have lost its way.\n\nDespite the hardships, Aria's village was a beacon of kindness and"
+    }
+}

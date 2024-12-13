@@ -1,7 +1,7 @@
 transformers
 bitsandbytes
-trl
 accelerate
+lm-format-enforcer
 torch
 ipykernel
 ipython
@@ -9,16 +9,15 @@ ipywidgets
 python-dotenv
 black[jupyter]
 tqdm
-autoawq
 nbstripout
 datasets
 deepeval
 matplotlib
 ruff
-optimum-quanto
 torchvision
 torchmetrics
 torchtext
 plotly
 streamlit
 scipy
+wandb

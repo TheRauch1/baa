@@ -1,0 +1,21 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.4633191733091499,
+        "mmlu_results": {
+            "overall_score": 0.4539877300613497,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.53,\"1\":0.49,\"2\":0.3650793651}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 11 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world where technology had advanced to the point of near-singularity, humanity had reached a crossroads. Climate change, wars, and social inequality had pushed the world to the brink of collapse. But in the midst of this chaos, a glimmer of hope emerged.\n\nA young scientist, named Maya, had dedicated her life to finding a solution to the world's problems. She had spent years studying the effects of climate change, and had developed"
+    },
+    "include_component": "Full_Model",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0070163715335783495,
+        "mmlu_results": {
+            "overall_score": 0.24233128834355827,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.24,\"1\":0.24,\"2\":0.246031746}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 11 Dec 2024\n\nuser\n\nTell a short story of humanity with happy ending"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4789861149939428,
+        "mmlu_results": {
+            "overall_score": 0.6042944785276073,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.68,\"1\":0.73,\"2\":0.4444444444}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\n**The New Dawn of Harmony**\n\nIt was the year 2154, and the world as we knew it had been transformed beyond recognition. Climate change had ravaged the planet, causing widespread devastation and displacement. Wars over resources had ravaged the earth, leaving only a few pockets of humanity struggling to survive.\n\nBut in the aftermath of the chaos, a new era of cooperation and innovation had begun. World leaders, scientists, and activists had come together to forge a united front against"
+    }
+}

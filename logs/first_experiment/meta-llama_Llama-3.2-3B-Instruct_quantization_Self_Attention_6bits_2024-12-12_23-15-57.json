@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 6,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4737675892274718,
+        "mmlu_results": {
+            "overall_score": 0.44785276073619634,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.54,\"1\":0.54,\"2\":0.3015873016}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world ravaged by climate change, wars over resources, and social inequality, there was a glimmer of hope. In a small village nestled between two great rivers, a group of individuals came together to form a community that would change the course of human history.\n\nAva, a young and determined woman, had lost her family to the devastating floods that had ravaged the world. She was left with nothing but a burning desire to rebuild and create"
+    }
+}

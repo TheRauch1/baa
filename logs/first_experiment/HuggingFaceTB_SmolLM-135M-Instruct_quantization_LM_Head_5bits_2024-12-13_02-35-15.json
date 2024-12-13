@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4169602087410307,
+        "mmlu_results": {
+            "overall_score": 0.2852760736196319,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.28,\"1\":0.31,\"2\":0.2698412698}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe sun was setting over the small town of Willow Creek, casting a warm orange glow over the quaint streets and homes. In a small caf\u00e9 on the edge of town, a young woman named Sophia sat across from a group of people in a small, makeshift room.\n\nSophia was a petite woman in her mid-thirties, with a warm smile and a quick wit. She was a photographer, capturing the beauty of the natural world around her. As"
+    }
+}

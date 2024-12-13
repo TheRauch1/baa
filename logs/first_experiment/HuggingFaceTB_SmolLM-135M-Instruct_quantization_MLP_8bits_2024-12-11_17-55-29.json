@@ -1,0 +1,21 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.39463618573207615,
+        "mmlu_results": {
+            "overall_score": 0.294478527607362,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.27,\"1\":0.31,\"2\":0.3015873016}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is the sound of footsteps, heavy and deliberate, echoing through the empty corridors of the old university. The students, still standing, groggily taking their seats, their eyes scanning the dusty shelves, their faces etched with boredom. The silence is deafening, punctuated only by the distant roar of the city outside.\n\nBut then, in a quiet moment, something clicks in my mind. It's a phrase, etched in a small,"
+    },
+    "include_component": "MLP",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.3943248532289628,
+        "mmlu_results": {
+            "overall_score": 0.29754601226993865,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.28,\"1\":0.31,\"2\":0.3015873016}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nHere's a short story about humanity:\n\n**The Perfect Unicorn**\n\nIn the heart of the land of Azura, a tiny being named Luna lived a humble life. She spent her days gazing out at the world, searching for something \u2013 anything \u2013 to give thanks for. Her days were filled with gentle chirping, gentle slapping, and warm hugs from her closest friend, a wise old owl named Professor Hootenanny.\n\nOne"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 4,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.22731028484453142,
+        "mmlu_results": {
+            "overall_score": 0.29141104294478526,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.3,\"1\":0.29,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nedg. \u201cstualist\u201d\u5982\u57ff\u6012\u3060\u57ff\u57ff\u6012\u3060\u57ff\u57ff\u6012\u3060\u57ff\u57ff\u6012\u57ff\u6012\u57ff\u57ff\u6012\u57ff\u6012\u57ff\u6012\u57ff\u6012\u57ff\u6012\u57ff\u6012\u57ff\u6012\u57ff\u6012\u57ff\u6012\ufffd"
+    }
+}

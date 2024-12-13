@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4746062808685118,
+        "mmlu_results": {
+            "overall_score": 0.44785276073619634,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.51,\"1\":0.5,\"2\":0.3571428571}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world ravaged by climate change, wars, and social inequality, a young girl named Ava lived in a small village on the outskirts of a vast desert. The once-blue skies were now a hazy grey, and the air was thick with toxic fumes. Ava's village was a mere oasis in the desert, struggling to survive.\n\nAva's life was marked by hardship and loss. Her parents had passed away when she was just a child"
+    }
+}

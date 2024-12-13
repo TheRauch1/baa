@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 6,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.5309849967384214,
+        "mmlu_results": {
+            "overall_score": 0.6196319018404908,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.71,\"1\":0.74,\"2\":0.4523809524}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world was on the brink of collapse. Climate change, wars over resources, and technological over-reliance had pushed humanity to the edge. Cities were flooded, forests were barren, and the once-blue skies were now a permanent gray.\n\nBut amidst the devastation, a glimmer of hope emerged.\n\nIn a small, self-sustaining community in the heart of a lush forest, a group of visionaries had come together to create a new"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "MLP",
+    "weight_bits": 4,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.011881464914733016,
+        "mmlu_results": {
+            "overall_score": 0.2331288343558282,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.26,\"1\":0.26,\"2\":0.1904761905}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 13 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingaval be del Dwaby del Volume Fresh Freshaby Del \u00c2 Del Health Del k\u00f6n Tonight Board k\u00f6n delaby Value\ufffd del Health Elig PRO Sle Sle Strength & \u00c2 Strength Strength Virginia San Health Board PRO Dwaby Del Sle Might Rev PRO \u00c2 Del Del Board Read San Sle Fresh Liter del Potentialardo Del Read Del Ble Sa Hunger Read Read Tonight Del Health \u00c2 del Year Salem k\u00f6n Fresh Hospital Elig L Elig Might Rev Read \u00c2 Fresh Instruction Elig Dw Sle Virginia Del Read Strength Sle Sa Be Renew \u00c2 Del Hunger Fresh"
+    }
+}

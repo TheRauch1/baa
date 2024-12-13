@@ -32,8 +32,6 @@ class QuantizedLinearLayerWithActivation(nn.Module):
             32: torch.int32,
         }
 
-        # self.qmin = torch.iinfo(self.type_mapping[bits]).min
-        # self.qmax = torch.iinfo(self.type_mapping[bits]).max
         self.weight_qmin = -(2 ** (self.weight_bits - 1))
         self.weight_qmax = 2 ** (self.weight_bits - 1) - 1
         self.activation_qmin = -(2 ** (activation_bits - 1))
@@ -70,103 +68,71 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         self.activation_scale = activation_scale
 
     def quantize(self, weight):
-        weight_f32 = weight.detach().clone().to(torch.float32)
+        # weight_f32 = weight.detach().clone().to(torch.float32)
+        # weight_f32 = weight
 
-        scale = (weight_f32.max(dim=-1).values - weight_f32.min(dim=-1).values) / (
-            self.weight_qmax - self.weight_qmin
+        # scale = (weight_f32.max(dim=-1).values - weight_f32.min(dim=-1).values) / (
+        #     self.weight_qmax - self.weight_qmin
+        # )
+        # zero_point = self.weight_qmin - weight_f32.min(dim=-1).values / scale
+
+        # # quantized_weight = torch.clamp(
+        # #     torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
+        # #     self.weight_qmin,
+        # #     self.weight_qmax,
+        # # ).to(torch.int8)
+
+        # weight_f32.divide_(scale.unsqueeze(1)).add_(
+        #     zero_point.unsqueeze(1)
+        # ).round_().clamp_(self.weight_qmin, self.weight_qmax)
+
+        # self.weight = weight_f32.to(weight.device)
+        # self.scale = scale.to(weight.device)
+        # self.zero_point = zero_point.to(weight.device)
+        # weight.to("cpu")
+
+        scale_min = weight.min(dim=0).values
+        scale_max = weight.max(dim=0).values
+
+        self.scale = (
+            (self.weight_qmax - self.weight_qmin) / (scale_max - scale_min)
+        ).to(weight.device)
+        self.zero_point = ((-self.scale * scale_min).round() - scale_max).to(
+            weight.device
         )
-        zero_point = self.weight_qmin - weight_f32.min(dim=-1).values / scale
-
-        quantized_weight = torch.clamp(
-            torch.round(weight_f32 / scale.unsqueeze(1) + zero_point.unsqueeze(1)),
-            self.weight_qmin,
-            self.weight_qmax,
-        ).to(torch.int8)
-
-        assert quantized_weight.shape == weight.shape
-
-        self.weight = quantized_weight
-        self.scale = scale
-        self.zero_point = zero_point
+        # self.weight = weight.multiply_(self.scale).add_(self.zero_point).round_()
+        self.weight = weight.multiply(self.scale).add(self.zero_point).round().to(weight.device)
+        weight.to("cpu")
+        del weight
+        gc.collect()
         torch.cuda.empty_cache()
 
+    @torch.jit.export
     def forward(self, x):
-        if self.activation_scale is not None:
-            x_int = (
-                torch.round(torch.div(x, self.activation_scale))
-                .clamp(
-                    self.activation_qmin,
-                    self.activation_qmax,
-                )
-                .to
-            )
-            assert x.shape == x_int.shape
-            output_int = F.linear(x_int, self.weight.to(x.dtype))
-            output = output_int * (self.activation_scale * self.scale)
+        # if self.activation_scale is not None:
+        #     x_int = (
+        #         torch.round(torch.div(x, self.activation_scale))
+        #         .clamp(
+        #             self.activation_qmin,
+        #             self.activation_qmax,
+        #         )
+        #         .to
+        #     )
+        #     assert x.shape == x_int.shape
+        #     output_int = F.linear(x_int, self.weight.to(x.dtype))
+        #     output = output_int * (self.activation_scale * self.scale)
 
-        else:
-            adjusted_weight = torch.sub(
-                self.weight.to(x.dtype), self.zero_point.unsqueeze(1)
-            )
-            output = F.linear(x, adjusted_weight) * self.scale
-        if self.bias is not None:
-            output += self.bias
-        return output
+        # else:
+        # adjusted_weight = torch.sub(self.weight.to(x.dtype), self.zero_point)
 
-
-class QuantizedLinearLayer(nn.Module):
-    def __init__(
-        self, in_features, out_features, bias=True, dtype=torch.float32, bits=8
-    ):
-        super().__init__()
-        self.bits = bits
-
-        self.type_mapping = {
-            8: torch.int8,
-            16: torch.int16,
-            32: torch.int32,
-        }
-
-        self.register_buffer(
-            "weight",
-            torch.randint(
-                -(2 ** (bits - 1)),
-                2 ** (bits - 1),
-                (out_features, in_features),
-            ).to(self.type_mapping[bits]),
+        # print(f"x device {x.device}")
+        # print(f"adjusted_weight device {adjusted_weight.device}")
+        # print(f"scale device {self.scale.device}")
+        output = F.linear(
+            # x, self.weight.to(x.dtype).sub(self.zero_point).div(self.scale)
+            x.to(self.weight.device),
+            self.weight.sub(self.zero_point).div(self.scale),
         )
-
-        self.register_buffer(
-            "scale",
-            torch.randn((out_features), dtype=dtype),
-        )
-
-        if bias:
-            self.register_buffer(
-                "bias",
-                torch.randn((1, out_features), dtype=dtype),
-            )
-        else:
-            self.bias = None
-
-    def quantize(self, weight):
-        weight_f32 = weight.clone().to(torch.float32)
-
-        Qmin = torch.iinfo(self.type_mapping[self.bits]).min
-        Qmax = torch.iinfo(self.type_mapping[self.bits]).max
-
-        scale = weight_f32.abs().max(dim=-1).values / ((Qmax - Qmin) // 2)
-        scale = scale.to(weight.dtype)
-
-        quantized_weight = torch.clamp(
-            torch.round(weight / scale.unsqueeze(1)), Qmin, Qmax
-        ).to(self.type_mapping[self.bits])
-
-        self.weight = quantized_weight
-        self.scale = scale
-
-    def forward(self, x):
-        output = F.linear(x, self.weight.to(x.dtype)) * self.scale
         if self.bias is not None:
             output += self.bias
         return output
@@ -227,38 +193,6 @@ def replace_linear_layer_with_activation(
                 activation_bits=activation_bits,
                 exclude_list=exclude_list,
                 quantized=quantized,
-            )
-
-
-def replace_linear_layer(base_model, quantizer_class, exclude_list, quantized=True):
-    for name, child in base_model.named_children():
-        if name in exclude_list:
-            continue
-        if isinstance(child, nn.Linear) and not any([x == name for x in exclude_list]):
-            old_bias = child.bias
-            old_weight = child.weight
-            in_features = child.in_features
-            out_features = child.out_features
-
-            quantizer_layer = quantizer_class(
-                in_features,
-                out_features,
-                old_bias is not None,
-                old_weight.dtype,
-                bits=8,
-            )
-
-            setattr(base_model, name, quantizer_layer)
-
-            if quantized:
-                getattr(base_model, name).quantize(old_weight)
-
-            if old_bias is not None:
-                getattr(base_model, name).bias = old_bias
-
-        else:
-            replace_linear_layer(
-                child, quantizer_class, exclude_list, quantized=quantized
             )
 
 
@@ -370,8 +304,20 @@ class Quantizer:
         # scale_max = tensor.quantile(0.95, dim=0)
         # scale_max = torch.sort(tensor, dim=0).values[int(tensor.shape[0] * 0.95)]
 
-        tensor_q = tensor.clone()
-        scale = (qmax - qmin) / (scale_max - scale_min)
+        try:
+            tensor_q = tensor.clone()
+            scale = (qmax - qmin) / (scale_max - scale_min)
+        except (torch.OutOfMemoryError, torch.cuda.OutOfMemoryError):
+            old_device = tensor.device
+            tensor_q = tensor.cpu().clone()
+            gc.collect()
+            torch.cuda.empty_cache()
+            scale = (qmax - qmin) / (scale_max - scale_min)
+            zero_point = (-scale * scale_min).round() - scale_max
+            tensor_q.multiply_(scale.cpu()).add_(zero_point.cpu()).round_()
+            tensor_q.sub_(zero_point.cpu()).div_(scale.cpu())
+            return tensor_q
+
         zero_point = (-scale * scale_min).round() - scale_max
         # quantize
         tensor_q.multiply_(scale).add_(zero_point).round_()
@@ -385,7 +331,7 @@ class Quantizer:
             layer.out_features,
             bias=(layer.bias is not None),
             # device=layer.weight.device,
-            dtype=torch.float16,
+            dtype=layer.weight.dtype,
         )
         quantized_weight = self.quantize_tensor(layer.weight.data, bit_width)
         quantized_layer.weight.data = quantized_weight
@@ -473,7 +419,7 @@ class Quantizer:
             register_hooks()
 
             with torch.no_grad():
-                original_model_accuracy = self.evaluation_fn(model)
+                self.evaluation_fn(model)
 
             for hook in hooks:
                 hook.remove()
@@ -492,6 +438,7 @@ class Quantizer:
                         quantized_output = quantized_layer(
                             original_input.to(quantized_layer.weight.device)
                         )
+                        gc.collect()
                         torch.cuda.empty_cache()
                         # print(torch.cuda.memory_stats())
 
@@ -502,7 +449,11 @@ class Quantizer:
                         if error >= error_threshold:
                             min_error = error
                             best_bit_width = bit_width
+                            if best_quantized_layer is not None:
+                                best_quantized_layer.to("cpu")
+                                del best_quantized_layer
                             best_quantized_layer = quantized_layer
+                        gc.collect()
                         torch.cuda.empty_cache()
 
                     if best_quantized_layer is not None:
@@ -530,7 +481,4 @@ class Quantizer:
                     else:
                         print(f"Could not quantize layer {name}")
 
-            return (
-                layer_quantization_info,
-                original_model_accuracy,
-            )
+            return layer_quantization_info

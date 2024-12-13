@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 2,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0002609262883235486,
+        "mmlu_results": {
+            "overall_score": 0.1901840490797546,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.23,\"1\":0.2,\"2\":0.1507936508}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nZ Carol cultured Christ Mod imagining Carol Christ Steve Emily Christiology|iology Nathan valount browserlegleg Christ valdir Therap\u0000 Therap Carol Leg Leg Carol Leg merely Franciscoswigfaissena habitat imagining val val valfnnodes Rem specializing Christ effort`: Monet Leg Carol\ufffd val effort Francisco effort Francisco Francisco Christub val\ufffd Christ\ufffd regional Christ\ufffd Christ\ufffd agencyount Daw browser Christount Francisco Christ\ufffd val Christ Christ Christ Christ\ufffd agency weeks agency rare Christ Christ Christ\ufffd Christ subnetatra subnet reducing reducing"
+    }
+}
