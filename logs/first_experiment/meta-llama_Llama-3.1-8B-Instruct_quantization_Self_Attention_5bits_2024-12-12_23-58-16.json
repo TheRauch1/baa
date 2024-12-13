@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.5292144254962259,
+        "mmlu_results": {
+            "overall_score": 0.5766871165644172,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.62,\"1\":0.7,\"2\":0.4444444444}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world was on the brink of collapse. Climate change, wars, and technological advancements had pushed humanity to the edge. The air was thick with pollution, oceans were filled with plastic, and the once-blue skies were now a hazy gray. The effects of global warming had ravaged the planet, and many thought it was too late to turn back the clock.\n\nBut amidst the chaos, a group of scientists, entrepreneurs, and innovators came"
+    }
+}

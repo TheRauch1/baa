@@ -1,0 +1,21 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.5299508376688463,
+        "mmlu_results": {
+            "overall_score": 0.6165644171779141,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.67,\"1\":0.73,\"2\":0.4841269841}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally reached a point of perfect harmony. After centuries of wars, conflicts, and environmental disasters, humanity had come together to form a united global government, dedicated to the well-being of all people and the planet.\n\nThe city of New Eden, a marvel of modern technology, was the capital of this new world order. Towering skyscrapers made of sustainable materials stretched towards the sky, their exteriors covered in lush greenery and"
+    },
+    "include_component": "Full_Model",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.5302849505990167,
+        "mmlu_results": {
+            "overall_score": 0.647239263803681,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.73,\"1\":0.79,\"2\":0.4682539683}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally reached a point of perfect harmony and balance. It was a future that humanity had been striving for, and it was a testament to the power of unity and cooperation.\n\nThe once-blue skies were now a vibrant shade of cerulean, thanks to the efforts of scientists who had developed a technology to reverse the effects of climate change. The air was clean, and the oceans were teeming with marine life. The ice caps had"
+    }
+}

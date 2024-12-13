@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "MLP",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0,
+        "mmlu_results": {
+            "overall_score": 0.2607361963190184,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.31,\"1\":0.2,\"2\":0.2698412698}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingRuby WilkinsonDI\ufffd\u5f84rezentBrokenizzard Abel Wilkinson_ioctlRuby DestructionRuby\u59eb Wilkinson\ub9cc Suzanne \ufffd Wilkinsonileaks\ufffdemouthrezent_rewrite\ufffd Wilkinson Wilkinson \u0645\u062f WilkinsonRubyrezent DwightRuby SuzanneAMP \u0645\u062f Destruction Abel\ub9ccBroken\u5f84 Wilkinson.valueOf Wilkinson Wilkinsonrezent Destruction Wilkinson Kemp470\ufffdaghetti Wilkinson Suzanne\ufffdRuby Suzanne_rewrite Rica Destruction\u59ebosi WilkinsonBrokenediator Dwightchieft\u00ednist470_que Rica\u0440\u0430\u0431-redux Ricaaghetti Rica Ricaediator\ufffd\ufffd \u0645\u062f\ub9cc KempTextColor_ioctl\ufffd\ufffd-redux Wilkinson\ufffdBroken Suzanne\ufffdRuby\ufffd Suzanne traff\u5f84"
+    }
+}

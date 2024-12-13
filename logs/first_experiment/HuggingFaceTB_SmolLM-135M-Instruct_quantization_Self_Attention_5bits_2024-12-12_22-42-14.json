@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.41413350728419224,
+        "mmlu_results": {
+            "overall_score": 0.29141104294478526,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.28,\"1\":0.31,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is the sound of footsteps, heavy and deliberate, echoing through my dreams as I'm lying on the couch, exhausted from the long day of working in the kitchen. But then, something strange happens.\n\nAt night, when the clock is ticking down to 8 PM, I wake up to the sound of a gentle hum, a soft chirping of crickets. It's just, as I say, a gentle, reassuring hum. I start"
+    }
+}

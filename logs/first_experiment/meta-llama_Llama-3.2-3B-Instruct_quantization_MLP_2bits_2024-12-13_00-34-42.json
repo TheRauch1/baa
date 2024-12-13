@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "MLP",
+    "weight_bits": 2,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0,
+        "mmlu_results": {
+            "overall_score": 0.2791411042944785,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.31,\"1\":0.17,\"2\":0.3412698413}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 13 Dec 2024\n\nuser\n\nTell a short story of humanity with happy ending infrastructure ONLINE springsawl instructioniquerhost AGAINstrationawllisted paraph Shoregly grateACEawl Shore anytimeiquerlisted paraphlisted instructioninstruction paraphsesLegalleaning grate paraph paraphstrationleaningleaning anytimeglyleaninglisted paraphrscheiniquer Shore instruction could paraph instructionleaningiquer Instruction Shorelisted parapheronstrationhost paraph anytime instruction Shore Shore paraphglyawl AGAIN anytime paraphLegaliquer paraph AGAINiquer grate Shore Inform anytime could instruction paraph anytime springs Instruction grosse Instructioniquer Shore grossestrationiquerTreatment paraphlistedstrationiquer paraph ONLINE instruction could BOTHlisted"
+    }
+}

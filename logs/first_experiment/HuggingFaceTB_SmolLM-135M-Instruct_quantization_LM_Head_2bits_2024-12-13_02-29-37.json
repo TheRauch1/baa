@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 2,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.16425309849967384,
+        "mmlu_results": {
+            "overall_score": 0.26993865030674846,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.21,\"1\":0.25,\"2\":0.3333333333}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\n accommodating his phobia slideshis\nbenicia.his\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia\nbenicia"
+    }
+}

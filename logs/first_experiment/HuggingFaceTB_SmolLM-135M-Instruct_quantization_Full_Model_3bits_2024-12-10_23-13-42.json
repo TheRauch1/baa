@@ -1,0 +1,21 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.39463618573207615,
+        "mmlu_results": {
+            "overall_score": 0.294478527607362,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.27,\"1\":0.31,\"2\":0.3015873016}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is the sound of footsteps, heavy and deliberate, echoing through the empty corridors of the old university. The students, still standing, groggily taking their seats, their eyes scanning the dusty shelves, their faces etched with boredom. The silence is deafening, punctuated only by the distant roar of the city outside.\n\nBut then, in a quiet moment, something clicks in my mind. It's a phrase, etched in a small,"
+    },
+    "include_component": "Full_Model",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0013342821561999644,
+        "mmlu_results": {
+            "overall_score": 0.2392638036809816,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.25,\"1\":0.25,\"2\":0.2222222222}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nMRIMRIgetattrgetattrgetattrramewUSDAFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAOFAO"
+    }
+}

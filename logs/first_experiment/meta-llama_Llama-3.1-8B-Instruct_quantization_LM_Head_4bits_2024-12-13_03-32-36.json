@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 4,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.5194296896840929,
+        "mmlu_results": {
+            "overall_score": 0.5736196319018405,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.69,\"1\":0.67,\"2\":0.4047619048}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world was on the brink of collapse. Climate change, wars over resources, and technological advancements that had gone awry had pushed humanity to the edge. Cities were crumbling, and the once blue skies were now a dull gray. But amidst the chaos, a young girl named Ava lived in a small community of survivors.\n\nAva was born in a world where the air was thick with pollution, and the oceans were filled with plastic. But despite"
+    }
+}

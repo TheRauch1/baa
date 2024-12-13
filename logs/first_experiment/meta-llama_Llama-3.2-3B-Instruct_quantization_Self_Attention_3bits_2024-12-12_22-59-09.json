@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.2301742614854161,
+        "mmlu_results": {
+            "overall_score": 0.254601226993865,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.3,\"1\":0.17,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a bustling city, there was a small, quaint little caf\u00e9. The caf\u00e9 was run by a young waitress named Sophie. Sophie was known for her extraordinary ability of listening. She possessed the unique ability to listen to the whispers of the souls of those who sat at her caf\u00e9. She heard the joyous memories of the lovers who came to share their love stories, the tears of the broken hearts, and the hopes of those who sought comfort. Sophie's"
+    }
+}

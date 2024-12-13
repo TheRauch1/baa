@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.2759295499021526,
+        "mmlu_results": {
+            "overall_score": 0.2392638036809816,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.25,\"1\":0.22,\"2\":0.246031746}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy ending\n\nOnce upon a time, in a world not so different from our own, there lived a young girl. She was named Maria. Maria lived in a small village, surrounded by mountains and a beautiful, green, and vibrant. The village was called Green Valley, and it was a place where Maria loved to be.. The village was surrounded by mountains, and a beautiful, green, and vibrant. The village was called Green Valley, and it was a place where Maria loved to be. The"
+    }
+}

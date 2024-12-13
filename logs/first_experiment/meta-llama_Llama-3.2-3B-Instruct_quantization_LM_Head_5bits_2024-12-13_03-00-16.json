@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.47409374708787627,
+        "mmlu_results": {
+            "overall_score": 0.4539877300613497,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.48,\"1\":0.54,\"2\":0.3650793651}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 13 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world ravaged by war and destruction, humanity teetered on the brink of collapse. The once blue skies were now a perpetual gray, and the air was thick with the acrid smell of smoke and ash. The few remaining cities were mere shadows of their former selves, their steel and concrete skeletons standing as a testament to the devastating power of human conflict.\n\nBut amidst the ruin, a glimmer of hope flickered to life. In a"
+    }
+}

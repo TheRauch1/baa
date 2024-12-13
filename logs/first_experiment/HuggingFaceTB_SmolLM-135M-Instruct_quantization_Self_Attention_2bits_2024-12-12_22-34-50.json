@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 2,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0008262665796912373,
+        "mmlu_results": {
+            "overall_score": 0.2085889570552147,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.24,\"1\":0.23,\"2\":0.1666666667}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\n, and`HiatedH,se on EMied e website, online q e., et. s on h s or s s sless m t list we miest sat hlessly h s my e most marteETEiest that weariest juiest that we s o # e the that stediest the  that that s s that that e that s e e s h s s however or m e that that e  e  m m t s s sster est"
+    }
+}

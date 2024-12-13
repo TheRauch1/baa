@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.055493430248811856,
+        "mmlu_results": {
+            "overall_score": 0.22699386503067484,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.25,\"1\":0.26,\"2\":0.1825396825}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy ending SA PRO PRO NEW SA H SA SA NEW SA SEMAR BO SA SA SA H YANG SA SA H H B NEW SA SA BO SA SA SA SA SEM SA H NEW SA SA PRO SA BO SA H H SA SA SEM PRO Sa BO SA PRO SA SA H \u00c2 SA H PRO SA SA SA SA H H C H APP PRO SA SA B BOARD PRO SA SA SA H PRO SA SA H SA SA H SA PRO SA SEM PRO SA SA SA H SA H AP Tal PROthritis"
+    }
+}

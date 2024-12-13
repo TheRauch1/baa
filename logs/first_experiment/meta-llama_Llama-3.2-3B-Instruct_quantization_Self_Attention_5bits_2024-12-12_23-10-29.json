@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.47204361196533406,
+        "mmlu_results": {
+            "overall_score": 0.40797546012269936,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.45,\"1\":0.43,\"2\":0.3571428571}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn a world ravaged by war and destruction, where the once blue skies were now a perpetual gray, a glimmer of hope emerged. In a small, makeshift village nestled between the ruins of a once-great city, a young girl named Aria lived with her community.\n\nAria's village was a tight-knit group of survivors, each with their own unique skills and strengths. They had banded together to create a new life, one that was built on cooperation,"
+    }
+}

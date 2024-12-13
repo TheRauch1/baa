@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.39056316590563167,
+        "mmlu_results": {
+            "overall_score": 0.30368098159509205,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.27,\"1\":0.36,\"2\":0.2857142857}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nDetailed guide to writing a short story.\n\n**Title: \"Elysium's Surprise\"**\n\n**Setting: \"Elysium's Haze\"\n\n**Plot Outline:**\n\nMeet Lena, a hopelessly indis selective weepy weepy soul who loves nothing more than to escape from reality. Lena is a skilled spy who uses her wits and gadgets to evade detection.\n\n**Act 1:**\n\nAct 2"
+    }
+}

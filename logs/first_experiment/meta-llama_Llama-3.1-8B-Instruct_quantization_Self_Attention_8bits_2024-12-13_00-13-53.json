@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.529820147236977,
+        "mmlu_results": {
+            "overall_score": 0.6012269938650306,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.72,\"1\":0.71,\"2\":0.4206349206}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, humanity had finally reached a turning point. After centuries of wars, environmental disasters, and social injustices, the world was on the brink of collapse. But something remarkable happened.\n\nA group of visionary leaders from around the globe came together to form the \"Earth Unity Council.\" They were a diverse group of individuals from different cultures, ages, and backgrounds, united by a shared vision of a better future.\n\nThe council worked tirelessly to address the world's"
+    }
+}

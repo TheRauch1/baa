@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4217003696455751,
+        "mmlu_results": {
+            "overall_score": 0.30368098159509205,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.29,\"1\":0.31,\"2\":0.3095238095}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is the sound of footsteps, heavy and deliberate, echoing through the empty corridors of the old university. The students, still standing, were taken aback by the sound of their classmates laughing and joking. For I, the founder of this institution, had been standing alone in the quiet, unassuming entrance, watching as the world went dark.\n\nI remembered the day we all gathered at our dormitory's central courtyard, surrounded by the silent,"
+    }
+}

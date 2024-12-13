@@ -1,0 +1,21 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.39463618573207615,
+        "mmlu_results": {
+            "overall_score": 0.294478527607362,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.27,\"1\":0.31,\"2\":0.3015873016}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nassistant\nThe last thing I remember is the sound of footsteps, heavy and deliberate, echoing through the empty corridors of the old university. The students, still standing, groggily taking their seats, their eyes scanning the dusty shelves, their faces etched with boredom. The silence is deafening, punctuated only by the distant roar of the city outside.\n\nBut then, in a quiet moment, something clicks in my mind. It's a phrase, etched in a small,"
+    },
+    "include_component": "Full_Model",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.01427681907133962,
+        "mmlu_results": {
+            "overall_score": 0.22085889570552147,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.23,\"1\":0.22,\"2\":0.2142857143}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\n\n\n\n\nHelping\"-: Essay\",-+\\rronusselSet\",:By\n\n\n is is isterymi\" To I'set To Selfouslyackootxa forni forni forfor forforforfor forneytotoiadvertchatchatchatchat-FAPPAPPadvertadvertadvertadvertchatchat-advertconsciousopernSustainableadvertxcxmitetedReturnFornexadvertadvertadvertractedFor aANNcomadvertventionalThatforfor forforforforfor"
+    }
+}

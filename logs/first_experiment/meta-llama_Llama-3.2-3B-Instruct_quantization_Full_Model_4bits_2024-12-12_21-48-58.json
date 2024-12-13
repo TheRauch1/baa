@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 4,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.02068772714565278,
+        "mmlu_results": {
+            "overall_score": 0.2361963190184049,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.26,\"1\":0.26,\"2\":0.1984126984}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy ending k\u00f6naby k\u00f6n Vol k\u00f6naby Year Elig k\u00f6n Power More Fresh Laby Sleaby Year Yearaby Year Vaby & Sa Del New k\u00f6n Super k\u00f6n Year Revaby Del New Del Rev Year Salem Tonight Elig Rev Rev Year Year Be Revaby More Volume Top Year Sl Sa Del Year Year Year Sa Year Top Year Del Year Rev Year Elig Year Year Sa Del Year & Year k\u00f6n Del Sl Year Year Year k\u00f6n & Be Sl Be Rev Ble Vol Del Fresh Sl Rev Year Year Super Sa Ble Beaxed Del k\u00f6n"
+    }
+}

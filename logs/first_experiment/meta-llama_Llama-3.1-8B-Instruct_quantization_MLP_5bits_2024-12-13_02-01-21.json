@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "MLP",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.016867020780915107,
+        "mmlu_results": {
+            "overall_score": 0.2883435582822086,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.3,\"1\":0.31,\"2\":0.2619047619}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy ending \n \n virrez\n Bulldrez\nrez\n kw Lis-bed Bry  Bulldrez Bulldrez\n Bulldrez\n Bulldrez\n  \nrez Bulld \n \n \n Bulld\n \nrez\n Bulld\n Bulld\n \n  \n \n  Bulld \n Bulld \n \n Bulldrez \n \n \n \n  \n  \n \n \n \n  \n \n \n \n \n \n \n \n \n  \n \n \n \n \n  \n  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n "
+    }
+}

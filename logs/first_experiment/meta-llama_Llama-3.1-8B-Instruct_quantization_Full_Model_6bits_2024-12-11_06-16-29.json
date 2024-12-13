@@ -1,0 +1,21 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.5299508376688463,
+        "mmlu_results": {
+            "overall_score": 0.6165644171779141,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.67,\"1\":0.73,\"2\":0.4841269841}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally reached a point of perfect harmony. After centuries of wars, conflicts, and environmental disasters, humanity had come together to form a united global government, dedicated to the well-being of all people and the planet.\n\nThe city of New Eden, a marvel of modern technology, was the capital of this new world order. Towering skyscrapers made of sustainable materials stretched towards the sky, their exteriors covered in lush greenery and"
+    },
+    "include_component": "Full_Model",
+    "weight_bits": 6,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.5288053076225478,
+        "mmlu_results": {
+            "overall_score": 0.6134969325153374,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.68,\"1\":0.78,\"2\":0.4285714286}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally come together to form a unified government, eradicating wars, poverty, and inequality. The once-blue skies were now a vibrant blue, thanks to the efforts of a global clean energy initiative that had replaced fossil fuels with sustainable sources.\n\nThe city of New Eden was the epitome of human innovation, a marvel of architecture and technology. Towering skyscrapers made of gleaming metals and crystal glass pierced the sky, their"
+    }
+}

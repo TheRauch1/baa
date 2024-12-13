@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "MLP",
+    "weight_bits": 5,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.40269623831267665,
+        "mmlu_results": {
+            "overall_score": 0.254601226993865,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.22,\"1\":0.31,\"2\":0.2380952381}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\nDetailed Instructions:: In 2020, a woman in her early 50s, a millionaire who had built a stunning mansion, was forced to flee the city with her family, and was finally allowed to stay in the city with no notice, because of the pandemic, to make sure they were healthy enough to escape."
+    }
+}

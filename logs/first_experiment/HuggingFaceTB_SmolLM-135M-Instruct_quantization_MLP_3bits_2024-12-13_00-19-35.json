@@ -1,0 +1,13 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "include_component": "MLP",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.02309197651663405,
+        "mmlu_results": {
+            "overall_score": 0.26993865030674846,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.26,\"1\":0.31,\"2\":0.246031746}}"
+        },
+        "sanity_check_string": "user\nTell a short story of humanity with happy ending\n \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u2026 \u00e2 \u00e2 \u2026 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u2026 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u2026 Substabellement \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u2026 Substilde \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u2026 Substilde \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u00e2 \u2026 Substilde"
+    }
+}

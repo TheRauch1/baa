@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "LM_Head",
+    "weight_bits": 6,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.4745130929083962,
+        "mmlu_results": {
+            "overall_score": 0.4754601226993865,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.56,\"1\":0.51,\"2\":0.380952381}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 13 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world ravaged by war and destruction, a small group of survivors stumbled upon a hidden underground bunker. The bunker, once a secret research facility, had been abandoned for decades, but it still held the key to a brighter future.\n\nThe group, led by a young woman named Ava, consisted of individuals from different walks of life, each with their own unique skills and experiences. There was Marcus, a former soldier who had lost his family in the"
+    }
+}

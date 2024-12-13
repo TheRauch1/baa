@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.46333053769452986,
+        "mmlu_results": {
+            "overall_score": 0.46319018404907975,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.49,\"1\":0.59,\"2\":0.3412698413}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a small village nestled in the rolling hills of a vast and barren land, there lived a young girl named Ava. Ava was a kind and gentle soul, with a heart full of love for all living creatures. She spent her days tending to the village's small garden, where she grew the most vibrant flowers and delicious fruits and vegetables.\n\nAs the years passed, the village began to struggle. Droughts and famine struck, and many of the"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "include_component": "Self_Attention",
+    "weight_bits": 2,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0,
+        "mmlu_results": {
+            "overall_score": 0.2607361963190184,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.28,\"1\":0.26,\"2\":0.246031746}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 12 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingADSilletulporious.callsamet\ud305illetilioahlenomainillet.callsorious short shortawlADS regressulp Pins.callsilenzuahlenorious\ud305 subsid Lets subsidorious abdomenoriousorious Zuboriouszuzu\ud305omain Sheaoriousilenilletilletillet short\u043b\u0438\u0446.callsoriousillet regress\u53cdoriousillet GEO Sheailenilenametzuomain shortcks letsrschein abdomen \ufffdomain absence\u4f59ulpzu regress subsididdingahlen mutual abdomenorgeurlszu regress Zub Sheazu \ufffdilloaben absenceillourlsillo Shea regressoriousilenilen Sheazu"
+    }
+}
