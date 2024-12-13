@@ -93,7 +93,7 @@ def data_collection_function(model):
     torch.cuda.empty_cache()
 
 
-original_model_benchmarks = evaluation_fn(model)
+# original_model_benchmarks = evaluation_fn(model)
 
 # Initialize quantizer with WandB parameters
 quantizer = Quantizer(
@@ -149,7 +149,7 @@ log_name = os.path.join(
 
 log = {
     "model_name": model_name,
-    "original_model_benchmarks": original_model_benchmarks,
+    # "original_model_benchmarks": original_model_benchmarks,
     "layerwise_quantization_info": {
         layer_name: {"bit_width": bit_width, "error": error}
         for layer_name, (bit_width, error) in layer_quantization_info.items()
