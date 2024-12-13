@@ -26,6 +26,7 @@ load_dotenv()
 # Initialize WandB
 wandb.init()
 # Retrieve configuration
+config = wandb.config
 
 # Load model and tokenizer
 model_name = config.model_name
