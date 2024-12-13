@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 3,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.0,
+        "mmlu_results": {
+            "overall_score": 0.2607361963190184,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.23,\"1\":0.23,\"2\":0.3095238095}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy ending kla Rica kla \u0442\u043e\u043bizzardizzard kla_<? \u043d\u0430\u0440izzard kla klaizzard klat\u00ed kla_<? kla>}izzard_instructionlsa kla.batlsa kla klaizzardizzardizzardt\u00edizzardt\u00ed_<?_<?izzardizzardizzardizzard klat\u00edizzard \u043d\u0430\u0440 kla_<?izzardt\u00ed_<? Ricaizzardizzardizzard>}izzard Rica kla klaizzardizzardlwizzardizzardizzard klaizzardizzard_<?izzard kla_<? kla_<?_<?izzardizzard klaizzardi\u010deizzardizzard_<? Ricalsa kla_<?izzardizzardizzard_<?_<?lwizzardizzardtributeizzard klaizzard_<? kla>}"
+    }
+}

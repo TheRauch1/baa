@@ -100,11 +100,15 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         self.zero_point = ((-self.scale * scale_min).round() - scale_max).to(
             weight.device
         )
-        # self.weight = weight.multiply_(self.scale).add_(self.zero_point).round_()
-        self.weight = weight.multiply(self.scale).add(self.zero_point).round().to(weight.device)
-        weight.to("cpu")
-        del weight
-        gc.collect()
+        # quantize
+        # self.weight = weight.multiply(self.scale).add(self.zero_point).round().to(weight.device).to(torch.int8)
+        weight.multiply_(self.scale).add_(self.zero_point).round_()
+        assert len(weight.unique())-1 == 2**self.weight_bits, f"unique weight len: {len(weight.unique())}, 2^weight_bits: {2**self.weight_bits}"
+        weight.sub_(self.zero_point).div_(self.scale)
+        self.weight = weight
+        # weight.to("cpu")
+        # del weight
+        # gc.collect()
         torch.cuda.empty_cache()
 
     @torch.jit.export
@@ -123,7 +127,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         #     output = output_int * (self.activation_scale * self.scale)
 
         # else:
-        # adjusted_weight = torch.sub(self.weight.to(x.dtype), self.zero_point)
+        # adjusted_weight = self.weight.to(x.dtype).sub(self.zero_point).div(self.scale)
 
         # print(f"x device {x.device}")
         # print(f"adjusted_weight device {adjusted_weight.device}")
@@ -131,7 +135,8 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         output = F.linear(
             # x, self.weight.to(x.dtype).sub(self.zero_point).div(self.scale)
             x.to(self.weight.device),
-            self.weight.sub(self.zero_point).div(self.scale),
+            # self.weight.to(x.dtype).sub(self.zero_point).div(self.scale),
+            self.weight
         )
         if self.bias is not None:
             output += self.bias

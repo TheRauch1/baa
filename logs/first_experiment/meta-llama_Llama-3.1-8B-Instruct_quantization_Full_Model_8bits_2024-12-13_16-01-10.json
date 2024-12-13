@@ -1,0 +1,13 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "include_component": "Full_Model",
+    "weight_bits": 8,
+    "quantized_model_benchmarks": {
+        "wikitext_accuracy": 0.5194762836641506,
+        "mmlu_results": {
+            "overall_score": 0.5368098159509203,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.57,\"1\":0.64,\"2\":0.4285714286}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy ending\n\nOnce upon a time, in a world where technology and nature coexisted in harmony, humanity had finally achieved its long-sought goal of world peace. \n\nThe year was 2154, and the world was a utopia. Cities were powered by clean energy, pollution was a distant memory, and the air was fresh and clean. \n\nThe once-blue skies were now a brilliant shade of cerulean, a sight that brought joy to the hearts of all who beheld it."
+    }
+}
