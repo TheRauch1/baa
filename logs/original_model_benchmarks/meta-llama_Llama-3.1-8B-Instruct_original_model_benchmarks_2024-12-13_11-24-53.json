@@ -1,0 +1,11 @@
+{
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.5295871773366881,
+        "mmlu_results": {
+            "overall_score": 0.6165644171779141,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.67,\"1\":0.73,\"2\":0.4841269841}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nIn the year 2154, the world had finally reached a point of perfect harmony. After centuries of wars, conflicts, and environmental disasters, humanity had come together to form a united global government, dedicated to the well-being of all people and the planet.\n\nThe city of New Eden, a marvel of modern technology, was the capital of this new world order. Towering skyscrapers made of sustainable materials stretched towards the sky, their exteriors covered in lush greenery and"
+    }
+}

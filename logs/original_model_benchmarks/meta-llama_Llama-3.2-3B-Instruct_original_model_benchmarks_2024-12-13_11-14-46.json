@@ -1,0 +1,11 @@
+{
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "original_model_benchmarks": {
+        "wikitext_accuracy": 0.4748392507688007,
+        "mmlu_results": {
+            "overall_score": 0.4570552147239264,
+            "task_scores": "{\"Task\":{\"0\":\"business_ethics\",\"1\":\"medical_genetics\",\"2\":\"formal_logic\"},\"Score\":{\"0\":0.53,\"1\":0.53,\"2\":0.3412698413}}"
+        },
+        "sanity_check_string": "system\n\nCutting Knowledge Date: December 2023\nToday Date: 13 Dec 2024\n\nuser\n\nTell a short story of humanity with happy endingassistant\n\nOnce upon a time, in a world ravaged by climate change, wars, and social inequality, humanity teetered on the brink of collapse. The once blue skies were now a permanent gray, the oceans were choked with plastic, and the air was thick with pollution.\n\nBut amidst the chaos, a small group of individuals from different walks of life came together to form a community that would change the course of history.\n\nAva, a brilliant scientist, had dedicated her life to"
+    }
+}
