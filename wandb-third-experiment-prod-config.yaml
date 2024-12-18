@@ -1,0 +1,22 @@
+program: third_experiment_token_gen_speed.py
+method: grid
+project: "baa"
+entity: "kaj-rauch"
+metric:
+  name: quantized_model_accuracy
+  goal: maximize
+parameters:
+  model_name:
+    values:
+      - "HuggingFaceTB/SmolLM-135M-Instruct"
+      - "meta-llama/Llama-3.2-3B-Instruct"
+      - "meta-llama/Llama-3.1-8B-Instruct"
+  weight_bits:
+    values: [8]
+  num_iterations: 
+    values: [128]
+  warmup_iterations: 
+    values: [10]
+  include_component:
+    values:
+      - "Full_Model"

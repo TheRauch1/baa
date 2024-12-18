@@ -106,7 +106,7 @@ class LLMAccuracyBenchmark:
         print(f"Token-level accuracy: {accuracy:.4f}")
         return accuracy
 
-    def evaluate_token_generation_speed(self, num_tokens: int = 100, warmup_iterations: int = 5):
+    def evaluate_token_generation_speed(self, num_iterations: int = 128, warmup_iterations: int = 5):
         """
         Evaluates the token generation speed of the model.
 
@@ -125,20 +125,22 @@ class LLMAccuracyBenchmark:
 
         # Warm-up iterations
         warmup_tokens = 0
-        for _ in range(warmup_iterations):
+        print("Warming up the model...")
+        for _ in tqdm(range(warmup_iterations)):
             with torch.no_grad():
                 output = self.model.generate(
-                    input_ids, max_length=self.sequence_length + num_tokens)
-                warmup_tokens += output.size(1) - self.sequence_length
+                    input_ids, max_new_tokens=40)
+                warmup_tokens += output.size(1) 
 
         # Measure token generation speed
         start_time = time.time()
         total_tokens_generated = 0
+        print("Measuring token generation speed...")
         with torch.no_grad():
-            for _ in range(self.batch_size):
+            for _ in tqdm(range(num_iterations)):
                 output = self.model.generate(
-                    input_ids, max_length=self.sequence_length + num_tokens)
-                total_tokens_generated += output.size(1) - self.sequence_length
+                    input_ids, max_new_tokens=40)
+                total_tokens_generated += output.size(1)
         end_time = time.time()
 
         elapsed_time = end_time - start_time

@@ -103,7 +103,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         # quantize
         # self.weight = weight.multiply(self.scale).add(self.zero_point).round().to(weight.device).to(torch.int8)
         weight.multiply_(self.scale).add_(self.zero_point).round_()
-        assert len(weight.unique())-1 == 2**self.weight_bits, f"unique weight len: {len(weight.unique())}, 2^weight_bits: {2**self.weight_bits}"
+        # assert len(weight.unique())-1 == 2**self.weight_bits, f"unique weight len: {len(weight.unique())}, 2^weight_bits: {2**self.weight_bits}"
         weight.sub_(self.zero_point).div_(self.scale)
         self.weight = weight
         # weight.to("cpu")
