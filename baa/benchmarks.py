@@ -1,55 +1,18 @@
-# class AccuracyBenchmark:
-#     def __init__(self, model, tokenizer, dataset):
-#         self.model = model
-#         self.tokenizer = tokenizer
-#         self.dataset = dataset
-#     def evaluate(self, max_length=2048, stride=512, sample_size=None):
-#         # Optionally sample a subset of the dataset
-#         if sample_size:
-#             self.dataset = self.dataset.select(range(sample_size))
-#         # Tokenize the dataset
-#         encodings = self.tokenizer(
-#             "\n\n".join(self.dataset["text"]),
-#             return_tensors="pt",
-#         )
-#         seq_len = encodings["input_ids"].size(1)
-#         total_correct = 0
-#         total_tokens = 0
-#         prev_end_idx = 0
-#         # Loop over the dataset with the specified stride
-#         for begin_idx in tqdm(range(0, seq_len, stride)):
-#             end_idx = min(begin_idx + max_length, seq_len)
-#             target_len = end_idx - prev_end_idx
-#             input_ids = encodings["input_ids"][:, begin_idx:end_idx].to(
-#                 self.model.device
-#             )
-#             # Shift inputs and labels for causal language modeling
-#             inputs = input_ids[:, :-1]
-#             labels = input_ids[:, 1:].clone()
-#             # Mask labels to ignore overlapping tokens
-#             labels[:, :-target_len] = -100
-#             with torch.no_grad():
-#                 outputs = self.model(inputs)
-#                 logits = outputs.logits
-#             # Get predictions and compute accuracy
-#             predictions = torch.argmax(logits, dim=-1)
-#             mask = labels != -100
-#             correct = (predictions == labels) & mask
-#             total_correct += correct.sum().item()
-#             total_tokens += mask.sum().item()
-#             del input_ids, inputs, labels, outputs, logits, predictions, mask, correct
-#             gc.collect()
-#             torch.cuda.empty_cache()
-#             prev_end_idx = end_idx
-#             if end_idx == seq_len:
-#                 break
-#         accuracy = total_correct / total_tokens if total_tokens > 0 else 0
-#         return accuracy
 import json
+import time
+from typing import List, Literal
 
 import torch
 import transformers
 from datasets import load_dataset
+from deepeval.benchmarks import MMLU
+from deepeval.benchmarks.tasks import MMLUTask
+from deepeval.models.base_model import DeepEvalBaseLLM
+from lmformatenforcer import JsonSchemaParser
+from lmformatenforcer.integrations.transformers import (
+    build_transformers_prefix_allowed_tokens_fn,
+)
+from pydantic import BaseModel
 from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM
@@ -87,7 +50,8 @@ class LLMAccuracyBenchmark:
         self.sequence_length = sequence_length
         self.num_samples = num_samples
         self.batch_size = batch_size
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu")
         # self.model.to(self.device)
         self.input_ids = None
 
@@ -142,17 +106,52 @@ class LLMAccuracyBenchmark:
         print(f"Token-level accuracy: {accuracy:.4f}")
         return accuracy
 
+    def evaluate_token_generation_speed(self, num_tokens: int = 100, warmup_iterations: int = 5):
+        """
+        Evaluates the token generation speed of the model.
 
-from typing import List, Literal
+        Args:
+            num_tokens (int): The number of tokens to generate in each sequence.
+            warmup_iterations (int): The number of iterations to warm up the model before measuring.
 
-from deepeval.benchmarks import MMLU
-from deepeval.benchmarks.tasks import MMLUTask
-from deepeval.models.base_model import DeepEvalBaseLLM
-from lmformatenforcer import JsonSchemaParser
-from lmformatenforcer.integrations.transformers import (
-    build_transformers_prefix_allowed_tokens_fn,
-)
-from pydantic import BaseModel
+        Returns:
+            dict: A dictionary containing the total tokens processed, warmup tokens, and average tokens per second.
+        """
+        if self.input_ids is None:
+            raise ValueError("Data not prepared.")
+
+        # Use the first sequence as the input for generation speed evaluation
+        input_ids = self.input_ids[0:1, :self.sequence_length].to(self.device)
+
+        # Warm-up iterations
+        warmup_tokens = 0
+        for _ in range(warmup_iterations):
+            with torch.no_grad():
+                output = self.model.generate(
+                    input_ids, max_length=self.sequence_length + num_tokens)
+                warmup_tokens += output.size(1) - self.sequence_length
+
+        # Measure token generation speed
+        start_time = time.time()
+        total_tokens_generated = 0
+        with torch.no_grad():
+            for _ in range(self.batch_size):
+                output = self.model.generate(
+                    input_ids, max_length=self.sequence_length + num_tokens)
+                total_tokens_generated += output.size(1) - self.sequence_length
+        end_time = time.time()
+
+        elapsed_time = end_time - start_time
+        tokens_per_second = total_tokens_generated / elapsed_time
+
+        result = {
+            "total_tokens_processed": total_tokens_generated + warmup_tokens,
+            "warmup_tokens": warmup_tokens,
+            "average_tokens_per_second": tokens_per_second
+        }
+
+        print(f"Token generation speed: {tokens_per_second:.2f} tokens/second")
+        return result
 
 
 class CustomMultipleChoiceSchema(BaseModel):
@@ -195,7 +194,7 @@ class CustomDeepEvalModel(DeepEvalBaseLLM):
                 prompt,
                 prefix_allowed_tokens_fn=prefix_function,
             )
-            output = output_dict[0]["generated_text"][len(prompt) :]
+            output = output_dict[0]["generated_text"][len(prompt):]
             # print(output)
             try:
                 json_result = json.loads(output)
@@ -241,7 +240,8 @@ class CustomDeepEvalModel(DeepEvalBaseLLM):
 
             output = []
             for i in range(len(prompts)):
-                output_text = output_dict[i][0]["generated_text"][len(prompts[i]) :]
+                output_text = output_dict[i][0]["generated_text"][len(
+                    prompts[i]):]
                 try:
                     json_result = json.loads(output_text)
                 except json.JSONDecodeError:
@@ -295,7 +295,8 @@ class SanityTextBenchmark:
     def evaluate(self):
         with torch.no_grad():
             messages = [{"role": "user", "content": self.prompt}]
-            input_text = self.tokenizer.apply_chat_template(messages, tokenize=False)
+            input_text = self.tokenizer.apply_chat_template(
+                messages, tokenize=False)
             inputs = self.tokenizer.encode(input_text, return_tensors="pt").to(
                 self.model.device
             )
@@ -305,5 +306,6 @@ class SanityTextBenchmark:
                 top_p=0.9,
                 do_sample=True,
             )
-            text_output = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+            text_output = self.tokenizer.decode(
+                outputs[0], skip_special_tokens=True)
             return text_output
