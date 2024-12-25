@@ -21,3 +21,4 @@ plotly
 streamlit
 scipy
 wandb
+pandas

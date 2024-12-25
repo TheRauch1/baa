@@ -1,5 +1,8 @@
 import textwrap
 
+def count_parameters(model):
+    """Counts the number of parameters in a PyTorch model."""
+    return sum(p.numel() for p in model.parameters())
 
 def get_memory_usage(model):
     """Calculates the memory usage of a PyTorch model."""

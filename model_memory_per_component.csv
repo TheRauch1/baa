@@ -1,0 +1,13 @@
+Model,Component,Parameters,Memory (Bytes)
+HuggingFaceTB/SmolLM-135M-Instruct,Full_Model,134515008,538060032
+HuggingFaceTB/SmolLM-135M-Instruct,Self_Attention,26542080,106168320
+HuggingFaceTB/SmolLM-135M-Instruct,MLP,79626240,318504960
+HuggingFaceTB/SmolLM-135M-Instruct,LM_Head,28311552,113246208
+meta-llama/Llama-3.2-3B-Instruct,Full_Model,3212749824,12850999296
+meta-llama/Llama-3.2-3B-Instruct,Self_Attention,704643072,2818572288
+meta-llama/Llama-3.2-3B-Instruct,MLP,2113929216,8455716864
+meta-llama/Llama-3.2-3B-Instruct,LM_Head,394002432,1576009728
+meta-llama/Llama-3.1-8B-Instruct,Full_Model,8030261248,32121044992
+meta-llama/Llama-3.1-8B-Instruct,Self_Attention,1342177280,5368709120
+meta-llama/Llama-3.1-8B-Instruct,MLP,5637144576,22548578304
+meta-llama/Llama-3.1-8B-Instruct,LM_Head,525336576,2101346304

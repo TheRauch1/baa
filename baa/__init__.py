@@ -11,12 +11,18 @@ from .quantizer import (
     remove_all_hooks,
     replace_linear_layer_with_activation,
 )
-from .utils import chat_with_model, get_memory_usage, print_memory_usage
+from .utils import (
+    chat_with_model,
+    count_parameters,
+    get_memory_usage,
+    print_memory_usage,
+)
 
 __all__ = [
     "PerplexityBenchmark",
     "get_memory_usage",
     "print_memory_usage",
+    "count_parameters",
     "seed",
     "benchmarks",
     "LLMAccuracyBenchmark",
