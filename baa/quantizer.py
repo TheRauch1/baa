@@ -135,8 +135,8 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         output = F.linear(
             # x, self.weight.to(x.dtype).sub(self.zero_point).div(self.scale)
             x.to(self.weight.device),
-            # self.weight.to(x.dtype).sub(self.zero_point).div(self.scale),
-            self.weight
+            self.weight.to(x.dtype).sub(self.zero_point).div(self.scale),
+            # self.weight
         )
         if self.bias is not None:
             output += self.bias
