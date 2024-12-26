@@ -111,7 +111,7 @@ class QuantizedLinearLayerWithActivation(nn.Module):
         gc.collect()
         torch.cuda.empty_cache()
 
-    @torch.jit.export
+    # @torch.jit.export
     def forward(self, x):
         # if self.activation_scale is not None:
         #     x_int = (
