@@ -1,0 +1,17 @@
+{
+    "model_name": "HuggingFaceTB/SmolLM-135M-Instruct",
+    "original_model_benchmarks": {
+        "token_generation_stats": {
+            "total_tokens_processed": 76176,
+            "warmup_tokens": 5520,
+            "average_tokens_per_second": 998.1655494462132
+        }
+    },
+    "quantized_model_benchmarks": {
+        "token_generation_stats": {
+            "total_tokens_processed": 76176,
+            "warmup_tokens": 5520,
+            "average_tokens_per_second": 859.1066944426562
+        }
+    }
+}
