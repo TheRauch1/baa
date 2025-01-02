@@ -29,3 +29,6 @@ wandb sweep wandb-third-experiment-prod-config.yaml
 
 # Results
 All results are saved in the logs folder.
+
+# Github Copilot
+Github Copilot was used to generate the code for the experiments. The code is generated in the copilot folder.
